@@ -6,6 +6,9 @@ import { Provider } from 'react-redux'
 import store from '@/redux/store'
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { Toaster } from '@/components/ui/sonner.tsx'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import envConfig from '@/config.ts'
+import { BrowserRouter } from 'react-router'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,12 +21,16 @@ const queryClient = new QueryClient({
 })
 
 createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <Toaster richColors theme='system' position='top-right' duration={3000} />
-      <TooltipProvider>
-        <App />
-      </TooltipProvider>
-    </QueryClientProvider>
-  </Provider>
+  <GoogleOAuthProvider clientId={envConfig.GOOGLE_CLIENT_ID}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <Toaster richColors theme='system' position='top-right' duration={3000} />
+          <TooltipProvider>
+            <App />
+          </TooltipProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </Provider>
+  </GoogleOAuthProvider>
 )

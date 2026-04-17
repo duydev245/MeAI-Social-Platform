@@ -40,7 +40,7 @@ export default defineConfig([
           printWidth: 120,
           jsxSingleQuote: true
         }
-      ]
+      ],
     }
   },
 ])

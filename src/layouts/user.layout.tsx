@@ -1,7 +1,12 @@
 import React from 'react'
 
-function UserLayout() {
-  return <div>UserLayout</div>
+function UserLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <div>UserLayout</div>
+      {children}
+    </>
+  )
 }
 
 export default UserLayout
