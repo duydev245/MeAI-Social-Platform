@@ -3,25 +3,16 @@ import './App.css'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 
-const ScrollToTop = () => {
+function App() {
+  const routes = useCustomRoutes()
+
   const { pathname } = useLocation()
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
 
-  return null
-}
-
-function App() {
-  const routes = useCustomRoutes()
-
-  return (
-    <>
-      <ScrollToTop />
-      {routes}
-    </>
-  )
+  return <>{routes}</>
 }
 
 export default App
