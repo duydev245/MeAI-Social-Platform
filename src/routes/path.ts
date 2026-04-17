@@ -2,8 +2,8 @@ export const PATH = {
   HOME: "/",
   // AUTH
   AUTH: "/auth",
-  LOGIN: "/auth/login",
-  SIGN_UP: "/auth/sign-up",
+  LOGIN: "/auth/signin",
+  SIGN_UP: "/auth/signup",
   FORGOT_PASSWORD: "/auth/forgot-password",
   // POST
   POST: "/post",
