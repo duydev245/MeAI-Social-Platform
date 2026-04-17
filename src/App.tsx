@@ -9,7 +9,7 @@ function App() {
       <h1 className='text-red-500'>Get started</h1>
       <Button
         onClick={() => {
-          toast.success('This is a success message!')
+          toast.error('This is a success message!')
         }}
       >
         Button
