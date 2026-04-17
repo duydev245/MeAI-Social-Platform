@@ -1,5 +1,6 @@
 import { fetcher } from "@/apis/fetcher";
 import type { TAuthResponse, TResetPasswordBodyValues, TResetPasswordResponse, TSigninValues, TSignupBodyValues, TVerificationCodeResponse } from "@/models/auth.model";
+import axios from "axios";
 
 export const authApi = {
   async signin(data: TSigninValues): Promise<TAuthResponse> {
@@ -7,7 +8,17 @@ export const authApi = {
       const res = await fetcher.post('/api/User/auth/login', data);
       return res.data;
     } catch (error) {
-      throw error;
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const errorData = error.response.data;
+        if (errorData.detail) {
+          throw new Error(errorData.detail);
+        }
+        // Fallback (optional)
+        if (errorData.error?.description) {
+          throw new Error(errorData.error.description);
+        }
+      }
+      throw new Error('Sign in failed');
     }
   },
 

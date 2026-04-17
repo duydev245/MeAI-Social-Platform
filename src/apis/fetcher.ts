@@ -11,9 +11,12 @@ export const fetcher = axios.create({
 fetcher.interceptors.response.use(
   response => response,
   error => {
-    if (error.response) {
-      console.error('API Error:', error.response.data);
-      return Promise.reject(error.response.data);
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      // Handle unauthorized error (e.g., token expired)
+      // You can dispatch a logout action or redirect to the login page here
+      console.warn('Unauthorized! Redirecting to login...')
+      // Example: window.location.href = '/auth/sign-in';
     }
+    return Promise.reject(error);
   }
 )

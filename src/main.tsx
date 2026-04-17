@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 })
 
 createRoot(document.getElementById('root')!).render(
-  <GoogleOAuthProvider clientId={envConfig.GOOGLE_CLIENT_ID}>
+  <GoogleOAuthProvider clientId={envConfig.GOOGLE_CLIENT_ID} locale='en'>
     <Provider store={store}>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
