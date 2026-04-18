@@ -8,6 +8,7 @@ import { PATH } from '@/routes/path'
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet, useRoutes } from 'react-router'
 import type { RootState } from '@/redux/store'
+import PostFeed from '@/modules/user/PostFeed'
 
 const RejectedAuthRouter = () => {
   const storedUser = useSelector((state: RootState) => state.currentUser.currentUser)
@@ -21,6 +22,7 @@ const RejectedAuthRouter = () => {
 
 const useCustomRoutes = () => {
   const routes = useRoutes([
+    // Auth routes
     {
       path: PATH.AUTH,
       element: <RejectedAuthRouter />,
@@ -55,10 +57,12 @@ const useCustomRoutes = () => {
         }
       ]
     },
+    // Protected routes (add auth check here if needed)
     {
       path: PATH.HOME,
-      element: <div>Home</div>
+      element: <PostFeed />
     },
+    // Other routes
     {
       path: PATH.FORBIDDEN,
       element: <Forbidden />
