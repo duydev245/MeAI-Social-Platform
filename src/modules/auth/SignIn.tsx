@@ -27,6 +27,7 @@ function SignIn() {
     handleSubmit,
     formState: { errors }
   } = useForm<TSigninValues>({
+    mode: 'onChange',
     resolver: zodResolver(SigninSchema),
     defaultValues: {
       emailOrUsername: '',
@@ -137,7 +138,7 @@ function SignIn() {
                 type='button'
                 variant='link'
                 size='icon-lg'
-                className='absolute inset-y-0 right-3 top-1 text-neutral-500 hover:text-neutral-800'
+                className='absolute inset-y-0 right-3 top-0 h-11 text-neutral-500 hover:text-neutral-800'
                 onClick={() => setShowPassword((prev) => !prev)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
