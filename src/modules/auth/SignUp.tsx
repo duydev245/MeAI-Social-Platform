@@ -82,10 +82,7 @@ function SignUp() {
   const sendCodeMutation = useMutation({
     mutationFn: authApi.requestSignUpVerificationCode,
     onSuccess: (response) => {
-      if (!response?.isSuccess) {
-        toast.error(response?.error?.description ?? 'Failed to send code')
-        return
-      }
+      console.log('🚀 ~ SignUp ~ response:', response)
       toast.success('Verification code sent')
       setCodeCooldown(CODE_COOLDOWN_SECONDS)
     },
