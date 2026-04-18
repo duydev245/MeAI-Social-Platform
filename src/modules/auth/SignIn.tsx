@@ -20,7 +20,6 @@ function SignIn() {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const [showPassword, setShowPassword] = useState(false)
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
   const {
     register,
@@ -69,19 +68,14 @@ function SignIn() {
     }
   })
 
-  const isBusy = signInMutation.isPending || googleSignInMutation.isPending || isGoogleLoading
+  const isBusy = signInMutation.isPending || googleSignInMutation.isPending
 
   const onSubmit = async (values: TSigninValues) => {
     await signInMutation.mutateAsync(values)
   }
 
   const handleGoogleCredential = async (idToken: string) => {
-    setIsGoogleLoading(true)
-    try {
-      await googleSignInMutation.mutateAsync(idToken)
-    } finally {
-      setIsGoogleLoading(false)
-    }
+    await googleSignInMutation.mutateAsync(idToken)
   }
 
   return (
@@ -180,10 +174,8 @@ function SignIn() {
         <GoogleButton
           onCredential={handleGoogleCredential}
           onError={() => {
-            setIsGoogleLoading(false)
             toast.error('Google sign in failed')
           }}
-          onStart={() => setIsGoogleLoading(true)}
           isLoading={isBusy}
         />
       </CardContent>

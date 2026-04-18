@@ -6,7 +6,6 @@ import { ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
-
 import { authApi } from '@/apis/auth.api'
 import GoogleButton from '@/components/GoogleButton'
 import { Button } from '@/components/ui/button'
@@ -322,7 +321,6 @@ function SignUp() {
           onError={() => {
             toast.error('Google sign in failed')
           }}
-          onStart={() => undefined}
           isLoading={isBusy}
         />
       </CardContent>
