@@ -16,6 +16,7 @@ type UserSidebarProps = {
   isAuthed: boolean
   onCompose: () => void
   onRequireAuth: () => void
+  onLogoClick: () => void
   displayName: string
   displayEmail: string
   avatarUrl?: string
@@ -30,6 +31,7 @@ function UserSidebar({
   isAuthed,
   onCompose,
   onRequireAuth,
+  onLogoClick,
   displayName,
   displayEmail,
   avatarUrl,
@@ -41,7 +43,9 @@ function UserSidebar({
   return (
     <aside className='hidden md:sticky md:top-0 md:flex md:h-screen md:w-64 md:flex-col md:gap-6 md:self-start md:bg-white md:p-4'>
       <div className='flex items-center justify-between px-4 mb-3 cursor-pointer'>
-        <span className='text-3xl font-heading text-black'>@MeAI</span>
+        <span className='text-3xl font-heading text-black' onClick={onLogoClick}>
+          @MeAI
+        </span>
       </div>
       <nav className='flex flex-1 flex-col justify-between'>
         <div className='flex flex-col gap-2'>

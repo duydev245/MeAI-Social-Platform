@@ -9,6 +9,7 @@ type UserMobileHeaderProps = {
   avatarFallback: string
   isAuthed: boolean
   onRequireAuth: () => void
+  onLogoClick: () => void
 }
 
 function UserMobileHeader({
@@ -17,11 +18,14 @@ function UserMobileHeader({
   avatarUrl,
   avatarFallback,
   isAuthed,
-  onRequireAuth
+  onRequireAuth,
+  onLogoClick
 }: UserMobileHeaderProps) {
   return (
     <header className='sticky top-0 z-30 flex items-center justify-between border-b border-neutral-200/60 bg-white/95 px-4 py-3 backdrop-blur md:hidden'>
-      <span className='text-2xl font-heading text-black'>@MeAI</span>
+      <span className='text-2xl font-heading text-black' onClick={onLogoClick}>
+        @MeAI
+      </span>
       {isAuthed ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

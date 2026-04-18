@@ -33,11 +33,11 @@ function SignInRequiredDialog({ open, onOpenChange }: SignInRequiredDialogProps)
         </DialogHeader>
         <DialogFooter className='gap-2'>
           <DialogClose asChild>
-            <Button variant='outline' className='w-1/2'>
+            <Button variant='outline' className='sm:w-1/2'>
               Cancel
             </Button>
           </DialogClose>
-          <Button onClick={handleSignIn} className='w-1/2'>
+          <Button onClick={handleSignIn} className='sm:w-1/2'>
             Sign in
           </Button>
         </DialogFooter>

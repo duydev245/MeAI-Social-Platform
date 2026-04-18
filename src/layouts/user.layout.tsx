@@ -8,13 +8,17 @@ import SignInRequiredDialog from '@/components/user/SignInRequiredDialog'
 import UserMobileHeader from '@/components/user/UserMobileHeader'
 import UserMobileNav from '@/components/user/UserMobileNav'
 import UserSidebar from '@/components/user/UserSidebar'
+import { useNavigate } from 'react-router'
 
 function UserLayout({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate()
+
   const [isComposerOpen, setIsComposerOpen] = useState(false)
   const [isSignInOpen, setIsSignInOpen] = useState(false)
   const currentUser = useSelector((state: RootState) => state.currentUser.currentUser)
   const isAuthed = Boolean(currentUser)
-  const profilePath = PATH.USER.replace(':username', currentUser?.username ?? 'me')
+
+  const profilePath = PATH.USER_PROFILE.replace(':username', currentUser?.username ?? '')
   const displayName = currentUser?.username ?? 'meai-user'
   const displayEmail = currentUser?.email ?? 'user@meai.social'
   const avatarUrl = currentUser?.avatarPresignedUrl ?? undefined
@@ -42,6 +46,10 @@ function UserLayout({ children }: { children: React.ReactNode }) {
     setIsComposerOpen(true)
   }
 
+  const handleLogoClick = () => {
+    navigate(PATH.HOME)
+  }
+
   return (
     <>
       <div className='relative min-h-screen bg-white text-neutral-900'>
@@ -55,6 +63,7 @@ function UserLayout({ children }: { children: React.ReactNode }) {
           avatarFallback={avatarFallback}
           isAuthed={isAuthed}
           onRequireAuth={handleRequireAuth}
+          onLogoClick={handleLogoClick}
         />
 
         <div className='relative mx-auto flex min-h-screen w-full'>
@@ -67,6 +76,7 @@ function UserLayout({ children }: { children: React.ReactNode }) {
             displayEmail={displayEmail}
             avatarUrl={avatarUrl}
             avatarFallback={avatarFallback}
+            onLogoClick={handleLogoClick}
           />
 
           <main className='flex flex-1 justify-center'>
