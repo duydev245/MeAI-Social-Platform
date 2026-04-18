@@ -10,8 +10,8 @@ export const PATH = {
   POST_DETAIL: "/:username/post/:postId",
   // USER
   USER: "/:username",
-  // NOTIFICATION
-  USER_NOTIFICATION: "/notification",
+  USER_ACTIVITY: "/activity",
+  USER_FOLLOWERS: "/followers",
   // FORBIDDEN
   FORBIDDEN: "/forbidden"
 }

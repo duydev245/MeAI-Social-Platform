@@ -1,6 +1,5 @@
 import { profileApi } from '@/apis/profile.api'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
 
 function PostFeed() {
   const { data: userData } = useQuery({

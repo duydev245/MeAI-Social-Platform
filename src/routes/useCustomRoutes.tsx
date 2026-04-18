@@ -4,6 +4,7 @@ import SignIn from '@/modules/auth/SignIn'
 import SignUp from '@/modules/auth/SignUp'
 import Forbidden from '@/modules/others/Forbidden'
 import NotFound from '@/modules/others/NotFound'
+import UserLayout from '@/layouts/user.layout'
 import { PATH } from '@/routes/path'
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet, useRoutes } from 'react-router'
@@ -60,7 +61,27 @@ const useCustomRoutes = () => {
     // Protected routes (add auth check here if needed)
     {
       path: PATH.HOME,
-      element: <PostFeed />
+      element: (
+        <UserLayout>
+          <PostFeed />
+        </UserLayout>
+      )
+    },
+    {
+      path: PATH.USER_FOLLOWERS,
+      element: (
+        <UserLayout>
+          <div>Followers</div>
+        </UserLayout>
+      )
+    },
+    {
+      path: PATH.USER_ACTIVITY,
+      element: (
+        <UserLayout>
+          <div>Activity</div>
+        </UserLayout>
+      )
     },
     // Other routes
     {
