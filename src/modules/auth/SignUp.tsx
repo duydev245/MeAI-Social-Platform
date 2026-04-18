@@ -66,7 +66,7 @@ function SignUp() {
     mutationFn: authApi.signinWithGoogle,
     onSuccess: async (response) => {
       if (!response?.isSuccess) {
-        toast.error(response?.error?.description ?? 'Google sign in failed')
+        toast.error(response?.error?.description ?? 'Continue with Google failed')
         return
       }
 
@@ -75,19 +75,23 @@ function SignUp() {
       navigate(PATH.HOME)
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, 'Google sign in failed'))
+      toast.error(getErrorMessage(error, 'Continue with Google failed'))
     }
   })
 
   const sendCodeMutation = useMutation({
     mutationFn: authApi.requestSignUpVerificationCode,
     onSuccess: (response) => {
-      console.log('🚀 ~ SignUp ~ response:', response)
+      if (!response?.isSuccess) {
+        toast.error(response?.error?.description ?? 'Failed to send verification code')
+        return
+      }
       toast.success('Verification code sent')
       setCodeCooldown(CODE_COOLDOWN_SECONDS)
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, 'Failed to send code'))
+      console.error('🚀 ~ SendCodeMutation ~ error:', error)
+      toast.error('Failed to send code')
     }
   })
 

@@ -37,11 +37,6 @@ function SignIn() {
   const signInMutation = useMutation({
     mutationFn: authApi.signin,
     onSuccess: async (response) => {
-      if (!response?.isSuccess) {
-        toast.error(response?.error?.description ?? 'Sign in failed')
-        return
-      }
-
       await handleAuthSuccess(response, dispatch)
       toast.success('Signed in successfully')
       navigate(PATH.HOME)
@@ -54,11 +49,6 @@ function SignIn() {
   const googleSignInMutation = useMutation({
     mutationFn: authApi.signinWithGoogle,
     onSuccess: async (response) => {
-      if (!response?.isSuccess) {
-        toast.error(response?.error?.description ?? 'Google sign in failed')
-        return
-      }
-
       await handleAuthSuccess(response, dispatch)
       toast.success('Signed in successfully')
       navigate(PATH.HOME)

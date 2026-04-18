@@ -11,7 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { ForgotPasswordSchema, type TForgotPasswordValues, type TResetPasswordBodyValues } from '@/models/auth.model'
 import { PATH } from '@/routes/path'
-import { getErrorMessage } from '@/modules/auth/helpers/auth.helpers'
 
 const CODE_COOLDOWN_SECONDS = 180
 
@@ -42,7 +41,10 @@ function ResetPassword() {
   const resetPasswordMutation = useMutation({
     mutationFn: authApi.resetPassword,
     onSuccess: (response) => {
-      console.log('🚀 ~ ResetPassword ~ response:', response)
+      if (!response?.isSuccess) {
+        toast.error(response?.error?.description ?? 'Failed to reset password')
+        return
+      }
       const emailValue = getValues('email')?.trim()
       toast.success(`Password reset for ${emailValue} successful`)
       navigate(PATH.LOGIN)
@@ -56,13 +58,18 @@ function ResetPassword() {
   const sendCodeMutation = useMutation({
     mutationFn: authApi.requestResetPasswordVerificationCode,
     onSuccess: (response) => {
-      console.log('🚀 ~ ResetPassword ~ response:', response)
+      if (!response?.isSuccess) {
+        toast.error(response?.error?.description ?? 'Failed to send code')
+        return
+      }
+
       const emailValue = getValues('email')?.trim()
       toast.success(`Code is sent to ${emailValue}`)
       setCodeCooldown(CODE_COOLDOWN_SECONDS)
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, 'Failed to send code'))
+      console.error('🚀 ~ SendCodeMutation ~ error:', error)
+      toast.error('Failed to send code')
     }
   })
 
