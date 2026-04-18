@@ -1,15 +1,9 @@
-import type { TAuthResponse } from '@/models/auth.model'
 import type { AppDispatch } from '@/redux/store'
 import { profileApi } from '@/apis/profile.api'
 import { setLocalStorage } from '@/utils'
-import { setRole } from '@/redux/slices/user-role.slice'
 import { setCurrentUser } from '@/redux/slices/current-user.slice'
 
-export const handleAuthSuccess = async (authResponse: TAuthResponse, dispatch: AppDispatch) => {
-  const primaryRole = authResponse.value?.roles?.[0] ?? ''
-  setLocalStorage('role', primaryRole)
-  dispatch(setRole(primaryRole))
-
+export const handleAuthSuccess = async (dispatch: AppDispatch) => {
   const profileResponse = await profileApi.getMe()
   if (profileResponse?.value) {
     setLocalStorage('currentUser', profileResponse.value)

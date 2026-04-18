@@ -36,8 +36,8 @@ function SignIn() {
 
   const signInMutation = useMutation({
     mutationFn: authApi.signin,
-    onSuccess: async (response) => {
-      await handleAuthSuccess(response, dispatch)
+    onSuccess: async () => {
+      await handleAuthSuccess(dispatch)
       toast.success('Signed in successfully')
       navigate(PATH.HOME)
     },
@@ -48,8 +48,8 @@ function SignIn() {
 
   const googleSignInMutation = useMutation({
     mutationFn: authApi.signinWithGoogle,
-    onSuccess: async (response) => {
-      await handleAuthSuccess(response, dispatch)
+    onSuccess: async () => {
+      await handleAuthSuccess(dispatch)
       toast.success('Signed in successfully')
       navigate(PATH.HOME)
     },

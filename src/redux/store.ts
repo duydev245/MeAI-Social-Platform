@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
-import userRoleSlice from '@/redux/slices/user-role.slice'
 import currentUserSlice from '@/redux/slices/current-user.slice'
 import envConfig from '@/config'
 
 const rootReducer = combineReducers({
-  [userRoleSlice.name]: userRoleSlice.reducer,
-  [currentUserSlice.name]: currentUserSlice.reducer,
+  [currentUserSlice.name]: currentUserSlice.reducer
 })
 
 const store = configureStore({

@@ -53,7 +53,7 @@ function SignUp() {
         return
       }
 
-      await handleAuthSuccess(response, dispatch)
+      await handleAuthSuccess(dispatch)
       toast.success('Account created successfully')
       navigate(PATH.HOME)
     },
@@ -70,7 +70,7 @@ function SignUp() {
         return
       }
 
-      await handleAuthSuccess(response, dispatch)
+      await handleAuthSuccess(dispatch)
       toast.success('Signed in successfully')
       navigate(PATH.HOME)
     },
