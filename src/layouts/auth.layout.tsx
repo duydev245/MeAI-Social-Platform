@@ -11,21 +11,21 @@ function AuthLayout({ children }: { children: ReactNode }) {
       <main className='relative mx-auto flex min-h-screen w-full flex-col px-4 py-8 md:max-w-6xl md:px-6'>
         <div className='flex flex-1 items-center justify-center'>{children}</div>
         <footer className='mt-10 flex flex-wrap items-center justify-center gap-3 text-xs text-neutral-500'>
-          <span className='whitespace-nowrap'>&copy; 2026</span>
+          <span className='whitespace-nowrap cursor-default'>&copy; 2026</span>
           <span className='h-1 w-1 rounded-full bg-neutral-400' aria-hidden='true' />
-          <a className='whitespace-nowrap hover:text-neutral-700' href='#'>
+          <a className='whitespace-nowrap transition-all hover:text-neutral-700 hover:underline' href='#'>
             MeAI Terms and Conditions
           </a>
           <span className='h-1 w-1 rounded-full bg-neutral-400' aria-hidden='true' />
-          <a className='whitespace-nowrap hover:text-neutral-700' href='#'>
+          <a className='whitespace-nowrap transition-all hover:text-neutral-700 hover:underline' href='#'>
             Privacy Policy
           </a>
           <span className='h-1 w-1 rounded-full bg-neutral-400' aria-hidden='true' />
-          <a className='whitespace-nowrap hover:text-neutral-700' href='#'>
+          <a className='whitespace-nowrap transition-all hover:text-neutral-700 hover:underline' href='#'>
             Cookie Policy
           </a>
           <span className='h-1 w-1 rounded-full bg-neutral-400' aria-hidden='true' />
-          <a className='whitespace-nowrap hover:text-neutral-700' href='#'>
+          <a className='whitespace-nowrap transition-all hover:text-neutral-700 hover:underline' href='#'>
             Report a Problem
           </a>
         </footer>

@@ -6,7 +6,6 @@ import { ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
-
 import { authApi } from '@/apis/auth.api'
 import GoogleButton from '@/components/GoogleButton'
 import { Button } from '@/components/ui/button'
@@ -52,16 +51,9 @@ function SignIn() {
     }
   })
 
-  const isBusy = signInMutation.isPending || isGoogleLoading
-
-  const onSubmit = async (values: TSigninValues) => {
-    await signInMutation.mutateAsync(values)
-  }
-
-  const handleGoogleCredential = async (idToken: string) => {
-    setIsGoogleLoading(true)
-    try {
-      const response = await authApi.signinWithGoogle(idToken)
+  const googleSignInMutation = useMutation({
+    mutationFn: authApi.signinWithGoogle,
+    onSuccess: async (response) => {
       if (!response?.isSuccess) {
         toast.error(response?.error?.description ?? 'Google sign in failed')
         return
@@ -70,8 +62,22 @@ function SignIn() {
       await handleAuthSuccess(response, dispatch)
       toast.success('Signed in successfully')
       navigate(PATH.HOME)
-    } catch (error: any) {
+    },
+    onError: (error) => {
       toast.error(getErrorMessage(error, 'Google sign in failed'))
+    }
+  })
+
+  const isBusy = signInMutation.isPending || googleSignInMutation.isPending || isGoogleLoading
+
+  const onSubmit = async (values: TSigninValues) => {
+    await signInMutation.mutateAsync(values)
+  }
+
+  const handleGoogleCredential = async (idToken: string) => {
+    setIsGoogleLoading(true)
+    try {
+      await googleSignInMutation.mutateAsync(idToken)
     } finally {
       setIsGoogleLoading(false)
     }
