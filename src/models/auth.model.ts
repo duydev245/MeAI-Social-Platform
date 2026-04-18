@@ -33,7 +33,7 @@ export const SignupSchema = z.object({
     .regex(/(?=.*[^A-Za-z0-9])/, 'Password must include a special character')
     .trim(),
   confirmPassword: z.string().min(1, 'Confirm password is required').trim(),
-  code: z.string().length(6, 'Code is required').trim()
+  code: z.string().min(1, 'Code is required').length(6, 'Code must be 6 characters').trim()
 }).superRefine((data, ctx) => {
   if (data.password !== data.confirmPassword) {
     ctx.addIssue({
@@ -65,7 +65,7 @@ export const ForgotPasswordSchema = z.object({
     .regex(/(?=.*[^A-Za-z0-9])/, 'Password must include a special character')
     .trim(),
   confirmNewPassword: z.string().min(1, 'Confirm password is required').trim(),
-  code: z.string().length(6, 'Code is required').trim()
+  code: z.string().min(1, 'Code is required').length(6, 'Code must be 6 characters').trim()
 }).superRefine((data, ctx) => {
   if (data.newPassword !== data.confirmNewPassword) {
     ctx.addIssue({
