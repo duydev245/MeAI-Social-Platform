@@ -8,30 +8,41 @@ import SignInRequiredDialog from '@/components/user/SignInRequiredDialog'
 import UserMobileHeader from '@/components/user/UserMobileHeader'
 import UserMobileNav from '@/components/user/UserMobileNav'
 import UserSidebar from '@/components/user/UserSidebar'
+import { NotificationProvider, useNotifications } from '@/hooks/use-notifications'
 import { useNavigate } from 'react-router'
 
-function UserLayout({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate()
+type UserLayoutContentProps = {
+  children: React.ReactNode
+  isAuthed: boolean
+  profilePath: string
+  displayName: string
+  displayEmail: string
+  avatarUrl?: string
+  avatarFallback: string
+}
 
+function UserLayoutContent({
+  children,
+  isAuthed,
+  profilePath,
+  displayName,
+  displayEmail,
+  avatarUrl,
+  avatarFallback
+}: UserLayoutContentProps) {
+  const navigate = useNavigate()
   const [isComposerOpen, setIsComposerOpen] = useState(false)
   const [isSignInOpen, setIsSignInOpen] = useState(false)
-  const currentUser = useSelector((state: RootState) => state.currentUser.currentUser)
-  const isAuthed = Boolean(currentUser)
-
-  const profilePath = PATH.USER_PROFILE.replace(':username', `@${currentUser?.username ?? 'me'}`)
-  const displayName = currentUser?.username ?? 'meai-user'
-  const displayEmail = currentUser?.email ?? 'user@meai.social'
-  const avatarUrl = currentUser?.avatarPresignedUrl ?? undefined
-  const avatarFallback = displayName.slice(0, 2).toUpperCase()
+  const { hasUnread } = useNotifications()
 
   const navItems = useMemo(
     () => [
       { label: 'For you', to: PATH.HOME, icon: Home, end: true },
       { label: 'Followers', to: PATH.USER_FOLLOWERS, icon: Users, requiresAuth: true },
-      { label: 'Activity', to: PATH.USER_ACTIVITY, icon: Heart, requiresAuth: true },
+      { label: 'Activity', to: PATH.USER_ACTIVITY, icon: Heart, requiresAuth: true, hasIndicator: hasUnread },
       { label: 'Profile', to: profilePath, icon: User, requiresAuth: true }
     ],
-    [profilePath]
+    [profilePath, hasUnread]
   )
 
   const handleRequireAuth = () => {
@@ -95,6 +106,32 @@ function UserLayout({ children }: { children: React.ReactNode }) {
       <CreatePostDialog open={isComposerOpen} onOpenChange={setIsComposerOpen} />
       <SignInRequiredDialog open={isSignInOpen} onOpenChange={setIsSignInOpen} />
     </>
+  )
+}
+
+function UserLayout({ children }: { children: React.ReactNode }) {
+  const currentUser = useSelector((state: RootState) => state.currentUser.currentUser)
+  const isAuthed = Boolean(currentUser)
+
+  const profilePath = PATH.USER_PROFILE.replace(':username', `@${currentUser?.username ?? 'me'}`)
+  const displayName = currentUser?.username ?? 'meai-user'
+  const displayEmail = currentUser?.email ?? 'user@meai.social'
+  const avatarUrl = currentUser?.avatarPresignedUrl ?? undefined
+  const avatarFallback = displayName.slice(0, 2).toUpperCase()
+
+  return (
+    <NotificationProvider enabled={isAuthed} source='Social'>
+      <UserLayoutContent
+        isAuthed={isAuthed}
+        profilePath={profilePath}
+        displayName={displayName}
+        displayEmail={displayEmail}
+        avatarUrl={avatarUrl}
+        avatarFallback={avatarFallback}
+      >
+        {children}
+      </UserLayoutContent>
+    </NotificationProvider>
   )
 }
 

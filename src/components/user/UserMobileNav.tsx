@@ -7,6 +7,7 @@ type NavItem = {
   icon: LucideIcon
   end?: boolean
   requiresAuth?: boolean
+  hasIndicator?: boolean
 }
 
 type UserMobileNavProps = {
@@ -22,6 +23,14 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
 
   const renderItem = (item: NavItem) => {
     const Icon = item.icon
+    const iconNode = (
+      <span className='relative'>
+        <Icon className='h-4 w-4' />
+        {item.hasIndicator ? (
+          <span aria-hidden='true' className='absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500' />
+        ) : null}
+      </span>
+    )
     if (item.requiresAuth && !isAuthed) {
       return (
         <button
@@ -31,7 +40,7 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
           onClick={onRequireAuth}
           aria-disabled='true'
         >
-          <Icon className='h-4 w-4' />
+          {iconNode}
           {item.label}
         </button>
       )
@@ -46,7 +55,7 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
           `flex flex-col items-center gap-1 px-2 ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`
         }
       >
-        <Icon className='h-4 w-4' />
+        {iconNode}
         {item.label}
       </NavLink>
     )

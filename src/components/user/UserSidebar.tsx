@@ -9,6 +9,7 @@ type NavItem = {
   icon: LucideIcon
   end?: boolean
   requiresAuth?: boolean
+  hasIndicator?: boolean
 }
 
 type UserSidebarProps = {
@@ -25,6 +26,15 @@ type UserSidebarProps = {
 
 const itemClass =
   'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+
+const renderIcon = (Icon: LucideIcon, hasIndicator?: boolean) => (
+  <span className='relative'>
+    <Icon className='h-4 w-4' />
+    {hasIndicator ? (
+      <span aria-hidden='true' className='absolute -right-0.5 -bottom-0.5 h-2 w-2 rounded-full bg-red-500' />
+    ) : null}
+  </span>
+)
 
 function UserSidebar({
   navItems,
@@ -64,7 +74,7 @@ function UserSidebar({
                       }`
                     }
                   >
-                    <Icon className='h-4 w-4' />
+                    {renderIcon(Icon, primaryItem.hasIndicator)}
                     {primaryItem.label}
                   </NavLink>
                 )
@@ -89,7 +99,7 @@ function UserSidebar({
                   onClick={onRequireAuth}
                   aria-disabled='true'
                 >
-                  <Icon className='h-4 w-4' />
+                  {renderIcon(Icon, item.hasIndicator)}
                   {item.label}
                 </button>
               )
@@ -108,7 +118,7 @@ function UserSidebar({
                   }`
                 }
               >
-                <Icon className='h-4 w-4' />
+                {renderIcon(Icon, item.hasIndicator)}
                 {item.label}
               </NavLink>
             )

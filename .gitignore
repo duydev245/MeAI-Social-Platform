@@ -27,3 +27,4 @@ agents.md
 
 # Env files
 .env
+*.md
