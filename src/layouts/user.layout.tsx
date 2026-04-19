@@ -9,7 +9,7 @@ import UserMobileHeader from '@/components/user/UserMobileHeader'
 import UserMobileNav from '@/components/user/UserMobileNav'
 import UserSidebar from '@/components/user/UserSidebar'
 import { NotificationProvider, useNotifications } from '@/hooks/use-notifications'
-import { useNavigate } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 
 type UserLayoutContentProps = {
   children: React.ReactNode
@@ -109,7 +109,7 @@ function UserLayoutContent({
   )
 }
 
-function UserLayout({ children }: { children: React.ReactNode }) {
+function UserLayout() {
   const currentUser = useSelector((state: RootState) => state.currentUser.currentUser)
   const isAuthed = Boolean(currentUser)
 
@@ -129,7 +129,7 @@ function UserLayout({ children }: { children: React.ReactNode }) {
         avatarUrl={avatarUrl}
         avatarFallback={avatarFallback}
       >
-        {children}
+        <Outlet />
       </UserLayoutContent>
     </NotificationProvider>
   )

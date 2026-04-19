@@ -44,6 +44,10 @@ const ProtectedRoutes = ({ roleAccess, children }: ProtectedRoutesProps) => {
 }
 
 const useCustomRoutes = () => {
+  const followersPath = PATH.USER_FOLLOWERS.replace(/^\//, '')
+  const activityPath = PATH.USER_ACTIVITY.replace(/^\//, '')
+  const profilePath = PATH.USER_PROFILE.replace(/^\//, '')
+
   const routes = useRoutes([
     // Auth routes
     {
@@ -82,40 +86,33 @@ const useCustomRoutes = () => {
     },
     {
       path: PATH.HOME,
-      element: (
-        <UserLayout>
-          <PostFeed />
-        </UserLayout>
-      )
-    },
-    {
-      path: PATH.USER_PROFILE,
-      element: (
-        <UserLayout>
-          <UserProfile />
-        </UserLayout>
-      )
-    },
-    // Protected routes (add auth check here if needed)
-    {
-      path: PATH.USER_FOLLOWERS,
-      element: (
-        <ProtectedRoutes roleAccess='USER'>
-          <UserLayout>
-            <Follower />
-          </UserLayout>
-        </ProtectedRoutes>
-      )
-    },
-    {
-      path: PATH.USER_ACTIVITY,
-      element: (
-        <ProtectedRoutes roleAccess='USER'>
-          <UserLayout>
-            <UserActivity />
-          </UserLayout>
-        </ProtectedRoutes>
-      )
+      element: <UserLayout />,
+      children: [
+        {
+          index: true,
+          element: <PostFeed />
+        },
+        {
+          path: profilePath,
+          element: <UserProfile />
+        },
+        {
+          path: followersPath,
+          element: (
+            <ProtectedRoutes roleAccess='USER'>
+              <Follower />
+            </ProtectedRoutes>
+          )
+        },
+        {
+          path: activityPath,
+          element: (
+            <ProtectedRoutes roleAccess='USER'>
+              <UserActivity />
+            </ProtectedRoutes>
+          )
+        }
+      ]
     },
     // Other routes
     {
