@@ -18,7 +18,7 @@ function UserLayout({ children }: { children: React.ReactNode }) {
   const currentUser = useSelector((state: RootState) => state.currentUser.currentUser)
   const isAuthed = Boolean(currentUser)
 
-  const profilePath = PATH.USER_PROFILE.replace(':username', currentUser?.username ?? 'me')
+  const profilePath = PATH.USER_PROFILE.replace(':username', `@${currentUser?.username ?? 'me'}`)
   const displayName = currentUser?.username ?? 'meai-user'
   const displayEmail = currentUser?.email ?? 'user@meai.social'
   const avatarUrl = currentUser?.avatarPresignedUrl ?? undefined
