@@ -88,7 +88,7 @@ function UserActivity() {
       {isLoading ? (
         _renderSkeleton()
       ) : items.length === 0 ? (
-        <Card className='border border-dashed border-neutral-200 bg-white'>
+        <Card className='border-dashed border-neutral-200 bg-white'>
           <CardContent className='py-8 text-center text-sm text-neutral-500'>No notifications yet.</CardContent>
         </Card>
       ) : (
