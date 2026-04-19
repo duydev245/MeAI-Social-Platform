@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { differenceInDays, differenceInHours, format } from 'date-fns';
 
 export const setLocalStorage = (key: string, value: any) => {
   localStorage.setItem(key, JSON.stringify(value));
@@ -43,4 +43,23 @@ export const formatDateToLocaleString = (date: string | Date) => {
 export const formatDate = (dateString: string) => {
   // Use date-fns format for consistent server/client rendering
   return format(new Date(dateString), "d MMMM, yyyy 'at' HH:mm");
+};
+
+export const formatRelativeTime = (dateString?: string | null) => {
+  if (!dateString) return '';
+
+  const now = new Date();
+  const target = new Date(dateString);
+  const hours = differenceInHours(now, target);
+
+  if (hours < 24) {
+    return `${Math.max(0, hours)} gio truoc`;
+  }
+
+  const days = differenceInDays(now, target);
+  if (days < 7) {
+    return `${Math.max(0, days)} ngay truoc`;
+  }
+
+  return format(target, 'dd-MM-yyyy');
 };
