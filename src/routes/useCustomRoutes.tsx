@@ -100,7 +100,7 @@ const useCustomRoutes = () => {
     {
       path: PATH.USER_FOLLOWERS,
       element: (
-        <ProtectedRoutes roleAccess='user'>
+        <ProtectedRoutes roleAccess='USER'>
           <UserLayout>
             <Follower />
           </UserLayout>
@@ -110,7 +110,7 @@ const useCustomRoutes = () => {
     {
       path: PATH.USER_ACTIVITY,
       element: (
-        <ProtectedRoutes roleAccess='user'>
+        <ProtectedRoutes roleAccess='USER'>
           <UserLayout>
             <UserActivity />
           </UserLayout>
