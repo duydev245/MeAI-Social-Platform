@@ -12,6 +12,8 @@ import type {
   TFeedCursor,
   TPostLikeResponse,
   TPostResponse,
+  TFollowSuggestionResponse,
+  TFollowUserResponse,
   TReportPayload,
   TReportResponse,
   TUpdatePostPayload,
@@ -28,6 +30,8 @@ type TCommentListEnvelope = TResult<TCommentResponse[]>
 type TCreateCommentEnvelope = TCreateCommentResponse
 type TCreateReplyEnvelope = TCreateReplyResponse
 type TCommentLikeEnvelope = TResult<TCommentLikeResponse>
+type TFollowSuggestionEnvelope = TResult<TFollowSuggestionResponse[]>
+type TFollowListEnvelope = TResult<TFollowUserResponse[]>
 
 export const feedApi = {
   async getFeed(params: TFeedCursor) {
@@ -103,5 +107,22 @@ export const feedApi = {
   async deletePost(postId: string) {
     const response = await fetcher.delete<TDeletePostEnvelope>(`/api/Feed/posts/${postId}`)
     return response.data.value
+  },
+
+  async getFollowSuggestions(limit: number) {
+    const response = await fetcher.get<TFollowSuggestionEnvelope>('/api/Feed/follow/suggestions', {
+      params: { limit }
+    })
+    return response.data.value ?? []
+  },
+
+  async getFollowers(userId: string, params: TFeedCursor) {
+    const response = await fetcher.get<TFollowListEnvelope>(`/api/Feed/followers/${userId}`, { params })
+    return response.data.value ?? []
+  },
+
+  async getFollowing(userId: string, params: TFeedCursor) {
+    const response = await fetcher.get<TFollowListEnvelope>(`/api/Feed/following/${userId}`, { params })
+    return response.data.value ?? []
   }
 }

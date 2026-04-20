@@ -122,3 +122,21 @@ export type TCreateReplyPayload = {
 
 export type TCreateCommentResponse = TResult<TCommentResponse>
 export type TCreateReplyResponse = TResult<TCommentResponse>
+
+export type TFollowUserResponse = {
+  followId: string
+  userId: string
+  username: string
+  fullName: string | null
+  avatarUrl: string | null
+  postCount: number
+  followedAt: string | null
+}
+
+export type TFollowSuggestionResponse = {
+  userId: string
+  username: string
+  fullName: string | null
+  avatarUrl: string | null
+  postCount: number
+}
