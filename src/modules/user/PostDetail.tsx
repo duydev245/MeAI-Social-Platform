@@ -10,7 +10,9 @@ import { feedKeys } from '@/hooks/use-feed'
 import { PATH } from '@/routes/path'
 import PostDetailCard from '@/components/post-detail/PostDetailCard'
 import ReportCommentDialog from '@/components/post-detail/ReportCommentDialog'
+import PostDetailSkeleton from '@/components/post-detail/PostDetailSkeleton'
 import CommentList from '@/components/comment/CommentList'
+import CommentListSkeleton from '@/components/comment/CommentListSkeleton'
 import DeletePostDialog from '@/components/post/DeletePostDialog'
 import EditPostDialog from '@/components/post/EditPostDialog'
 import PostMediaViewerDialog from '@/components/post/PostMediaViewerDialog'
@@ -267,9 +269,10 @@ function PostDetail() {
         </div>
 
         {postQuery.isLoading ? (
-          <Card className='border-neutral-200 bg-white'>
-            <CardContent className='text-sm text-neutral-500'>Loading post...</CardContent>
-          </Card>
+          <div className='flex flex-col gap-4'>
+            <PostDetailSkeleton />
+            <CommentListSkeleton />
+          </div>
         ) : postQuery.isError || !post ? (
           <Card className='border-neutral-200 bg-white'>
             <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>

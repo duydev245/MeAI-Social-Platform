@@ -4,6 +4,7 @@ import type { TFeedCursor, TCommentResponse } from '@/models/feed.model'
 import { feedApi } from '@/apis/feed.api'
 import { feedKeys } from '@/hooks/use-feed'
 import CommentItem from '@/components/comment/CommentItem'
+import CommentListSkeleton from '@/components/comment/CommentListSkeleton'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -63,11 +64,7 @@ function CommentList({ postId, limit = 10, isAuthed, isPostOwner, onRequireAuth,
   }, [commentsQuery.fetchNextPage, commentsQuery.hasNextPage, commentsQuery.isFetchingNextPage])
 
   if (commentsQuery.isLoading) {
-    return (
-      <Card className='border-neutral-200 bg-white'>
-        <CardContent className='text-sm text-neutral-500'>Loading comments...</CardContent>
-      </Card>
-    )
+    return <CommentListSkeleton />
   }
 
   if (commentsQuery.isError) {
