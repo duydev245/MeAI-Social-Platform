@@ -24,6 +24,8 @@ export type TPostMediaResponse = {
 export type TPostResponse = {
   id: string
   userId: string
+  username: string
+  avatarUrl: string | null
   content: string | null
   mediaUrl: string | null
   mediaType: string | null
@@ -43,3 +45,13 @@ export type TPostLikeResponse = {
   likesCount: number
   isLikedByCurrentUser: boolean
 }
+
+export type TPostMediaType = 'Image' | 'Video' | null
+
+export type TCreatePostPayload = {
+  content: string | null
+  resourceIds: string[]
+  mediaType: TPostMediaType
+}
+
+export type TCreatePostResponse = TResult<TPostResponse>

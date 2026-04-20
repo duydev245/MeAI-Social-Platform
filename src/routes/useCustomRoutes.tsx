@@ -13,6 +13,7 @@ import PostFeed from '@/modules/user/PostFeed'
 import Follower from '@/modules/user/Follower'
 import UserActivity from '@/modules/user/UserActivity'
 import UserProfile from '@/modules/user/UserProfile'
+import PostDetail from '@/modules/user/PostDetail'
 
 const RejectedAuthRouter = () => {
   const storedUser = useSelector((state: RootState) => state.currentUser.currentUser)
@@ -47,6 +48,7 @@ const useCustomRoutes = () => {
   const followersPath = PATH.USER_FOLLOWERS.replace(/^\//, '')
   const activityPath = PATH.USER_ACTIVITY.replace(/^\//, '')
   const profilePath = PATH.USER_PROFILE.replace(/^\//, '')
+  const postDetailPath = PATH.POST_DETAIL.replace(/^\//, '')
 
   const routes = useRoutes([
     // Auth routes
@@ -91,6 +93,10 @@ const useCustomRoutes = () => {
         {
           index: true,
           element: <PostFeed />
+        },
+        {
+          path: postDetailPath,
+          element: <PostDetail />
         },
         {
           path: profilePath,

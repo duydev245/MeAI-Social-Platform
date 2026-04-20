@@ -9,7 +9,7 @@ import { useFeedInfiniteQuery, useToggleLike } from '@/hooks/use-feed'
 import { formatRelativeTime } from '@/utils'
 import CreatePostDialog from '@/components/post/CreatePostDialog'
 import SignInRequiredDialog from '@/components/user/SignInRequiredDialog'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -68,7 +68,7 @@ function PostFeed() {
   }
 
   const handleOpenDetail = (post: TPostResponse) => {
-    navigate(PATH.POST_DETAIL.replace(':username', post.userId).replace(':postId', post.id))
+    navigate(PATH.POST_DETAIL.replace(':username', `@${post.username}`).replace(':postId', post.id))
   }
 
   const handleToggleLike = (post: TPostResponse) => {
@@ -131,17 +131,17 @@ function PostFeed() {
                 >
                   <CardContent className='flex flex-col gap-4'>
                     <div className='flex items-start justify-between gap-3'>
-                      <div className='flex items-start gap-3' onClick={(event) => event.stopPropagation()}>
+                      <div
+                        className='flex items-center justify-start gap-2'
+                        onClick={(event) => event.stopPropagation()}
+                      >
                         <Avatar>
-                          <AvatarFallback>Me</AvatarFallback>
+                          {post.avatarUrl ? <AvatarImage src={post.avatarUrl} alt={post.username} /> : null}
+                          <AvatarFallback>{post.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                         </Avatar>
-                        <div className='space-y-1'>
-                          <div className='flex items-center gap-2 text-sm font-semibold text-neutral-900'>
-                            <span className='break-all'>{post.userId}</span>
-                            {timeLabel ? (
-                              <span className='text-xs font-normal text-neutral-500'>{timeLabel}</span>
-                            ) : null}
-                          </div>
+                        <div className='flex flex-col items-start text-sm font-semibold text-neutral-900'>
+                          <span className='break-all'>{post.username}</span>
+                          {timeLabel ? <span className='text-xs font-normal text-neutral-500'>{timeLabel}</span> : null}
                         </div>
                       </div>
                       <DropdownMenu>

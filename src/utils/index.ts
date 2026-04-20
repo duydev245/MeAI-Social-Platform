@@ -51,14 +51,19 @@ export const formatRelativeTime = (dateString?: string | null) => {
   const now = new Date();
   const target = new Date(dateString);
   const hours = differenceInHours(now, target);
+  const minutes = Math.floor((now.getTime() - target.getTime()) / (1000 * 60));
+
+  if (minutes < 60) {
+    return `${Math.max(0, minutes)}m ago`;
+  }
 
   if (hours < 24) {
-    return `${Math.max(0, hours)} gio truoc`;
+    return `${Math.max(0, hours)}h ago`;
   }
 
   const days = differenceInDays(now, target);
   if (days < 7) {
-    return `${Math.max(0, days)} ngay truoc`;
+    return `${Math.max(0, days)}d ago`;
   }
 
   return format(target, 'dd-MM-yyyy');
