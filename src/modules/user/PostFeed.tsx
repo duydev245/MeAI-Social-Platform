@@ -133,6 +133,18 @@ function PostFeed() {
     [isAuthed]
   )
 
+  const handleUserClick = useCallback(
+    (username: string) => {
+      if (!isAuthed) {
+        setIsSignInOpen(true)
+        return
+      }
+      const userPath = PATH.USER_PROFILE.replace(':username', `@${username}`)
+      navigate(userPath)
+    },
+    [isAuthed, navigate]
+  )
+
   useEffect(() => {
     if (!isAuthed || !feedQuery.hasNextPage) return
     const target = loadMoreRef.current
@@ -203,6 +215,7 @@ function PostFeed() {
                 onEditPost={handleEditPost}
                 onReportPost={handleReportPost}
                 onDeletePost={handleDeletePost}
+                onUserClick={handleUserClick}
               />
             ))}
           </div>

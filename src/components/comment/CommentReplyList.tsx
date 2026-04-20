@@ -11,6 +11,7 @@ type CommentReplyListProps = {
   isSameUsername: (left: string | null, right: string | null) => boolean
   onReportComment: (comment: TCommentResponse) => void
   onRequireAuth: () => void
+  onUserClick: (username: string) => void
   onToggleLike: (reply: TCommentResponse) => void
   onReplyTo: (reply: TCommentResponse) => void
   onDelete: (reply: TCommentResponse) => void
@@ -28,6 +29,7 @@ const CommentReplyList = memo(
     isSameUsername,
     onReportComment,
     onRequireAuth,
+    onUserClick,
     onToggleLike,
     onReplyTo,
     onDelete,
@@ -52,6 +54,7 @@ const CommentReplyList = memo(
               canReply
               onReportComment={onReportComment}
               onRequireAuth={onRequireAuth}
+              onUserClick={onUserClick}
               onToggleLike={onToggleLike}
               onReplyTo={onReplyTo}
               onDelete={onDelete}
@@ -76,6 +79,7 @@ const CommentReplyList = memo(
                       canReply={false}
                       onReportComment={onReportComment}
                       onRequireAuth={onRequireAuth}
+                      onUserClick={onUserClick}
                       onToggleLike={onToggleLike}
                       onReplyTo={onReplyTo}
                       onDelete={onDelete}

@@ -20,6 +20,7 @@ type PostDetailCardProps = {
   onReportPost: (post: TPostResponse) => void
   onDeletePost: (post: TPostResponse) => void
   onRequireAuth: () => void
+  onUserClick: (username: string) => void
 }
 
 const PostDetailCard = React.memo(
@@ -31,7 +32,8 @@ const PostDetailCard = React.memo(
     onEditPost,
     onReportPost,
     onDeletePost,
-    onRequireAuth
+    onRequireAuth,
+    onUserClick
   }: PostDetailCardProps) => {
     const timeLabel = useMemo(() => formatRelativeTime(post.createdAt), [post.createdAt])
     const isLiked = Boolean(post.isLikedByCurrentUser)
@@ -58,6 +60,9 @@ const PostDetailCard = React.memo(
       }
       onToggleLike(post)
     }, [isAuthed, onRequireAuth, onToggleLike, post])
+    const handleUserClick = useCallback(() => {
+      onUserClick(post.username)
+    }, [onUserClick, post.username])
     const handleCommentClick = useCallback(() => {
       if (!isAuthed) {
         onRequireAuth()
@@ -81,7 +86,7 @@ const PostDetailCard = React.memo(
       <Card className='border-neutral-200 bg-white'>
         <CardContent className='flex flex-col gap-3 sm:gap-4'>
           <div className='flex items-start justify-between gap-3'>
-            <div className='flex items-center justify-start gap-2'>
+            <div className='flex items-center justify-start gap-2 cursor-pointer' onClick={handleUserClick}>
               <Avatar className='h-9 w-9 sm:h-10 sm:w-10'>
                 {post.avatarUrl ? <AvatarImage src={post.avatarUrl} alt={post.username} /> : null}
                 <AvatarFallback>{post.username.slice(0, 2).toUpperCase()}</AvatarFallback>

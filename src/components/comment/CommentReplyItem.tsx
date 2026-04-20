@@ -16,6 +16,7 @@ type CommentReplyItemProps = {
   canReply?: boolean
   onReportComment: (comment: TCommentResponse) => void
   onRequireAuth: () => void
+  onUserClick: (username: string) => void
   onToggleLike: (reply: TCommentResponse) => void
   onReplyTo: (reply: TCommentResponse) => void
   onDelete: (reply: TCommentResponse) => void
@@ -33,6 +34,7 @@ const CommentReplyItem = memo(
     canReply = true,
     onReportComment,
     onRequireAuth,
+    onUserClick,
     onToggleLike,
     onReplyTo,
     onDelete,
@@ -64,16 +66,23 @@ const CommentReplyItem = memo(
       onReplyTo(reply)
     }
 
+    const handleUserClick = () => {
+      if (!reply.username) return
+      onUserClick(reply.username)
+    }
+
     return (
       <div className='flex gap-3'>
-        <Avatar className='h-7 w-7'>
+        <Avatar className='h-7 w-7 cursor-pointer' onClick={handleUserClick}>
           {reply.avatarUrl ? <AvatarImage src={reply.avatarUrl} alt={displayName} /> : null}
           <AvatarFallback>{avatarFallback}</AvatarFallback>
         </Avatar>
         <div className='flex-1 space-y-1'>
           <div className='flex items-start justify-between gap-2'>
             <div className='flex flex-col text-xs text-neutral-900'>
-              <span className='font-semibold break-all'>{displayName}</span>
+              <span className='font-semibold break-all cursor-pointer' onClick={handleUserClick}>
+                {displayName}
+              </span>
               {timeLabel ? <span className='text-[11px] font-normal text-neutral-500'>{timeLabel}</span> : null}
             </div>
             {isAuthed ? (

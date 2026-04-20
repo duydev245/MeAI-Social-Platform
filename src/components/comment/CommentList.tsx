@@ -15,6 +15,7 @@ type CommentListProps = {
   isPostOwner: boolean
   onRequireAuth: () => void
   onReportComment: (comment: TCommentResponse) => void
+  onUserClick: (username: string) => void
 }
 
 const getNextCursor = (items: TCommentResponse[], limit: number): TFeedCursor | undefined => {
@@ -28,7 +29,15 @@ const getNextCursor = (items: TCommentResponse[], limit: number): TFeedCursor | 
   }
 }
 
-function CommentList({ postId, limit = 10, isAuthed, isPostOwner, onRequireAuth, onReportComment }: CommentListProps) {
+function CommentList({
+  postId,
+  limit = 10,
+  isAuthed,
+  isPostOwner,
+  onRequireAuth,
+  onReportComment,
+  onUserClick
+}: CommentListProps) {
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
   const commentsQuery = useInfiniteQuery<
@@ -102,6 +111,7 @@ function CommentList({ postId, limit = 10, isAuthed, isPostOwner, onRequireAuth,
               isPostOwner={isPostOwner}
               onRequireAuth={onRequireAuth}
               onReportComment={onReportComment}
+              onUserClick={onUserClick}
               repliesLimit={limit}
             />
           ))}

@@ -29,6 +29,7 @@ type CommentItemProps = {
   isPostOwner: boolean
   onRequireAuth: () => void
   onReportComment: (comment: TCommentResponse) => void
+  onUserClick: (username: string) => void
   repliesLimit: number
 }
 
@@ -68,6 +69,7 @@ const CommentItem = memo(function CommentItem({
   isPostOwner,
   onRequireAuth,
   onReportComment,
+  onUserClick,
   repliesLimit
 }: CommentItemProps) {
   const queryClient = useQueryClient()
@@ -266,6 +268,11 @@ const CommentItem = memo(function CommentItem({
     requestAnimationFrame(() => replyInputRef.current?.focus())
   }
 
+  const handleUserClick = () => {
+    if (!comment.username) return
+    onUserClick(comment.username)
+  }
+
   const handleReplyTo = (target: TCommentResponse) => {
     if (!isAuthed) {
       onRequireAuth()
@@ -356,14 +363,16 @@ const CommentItem = memo(function CommentItem({
     <>
       <div className='rounded-xl border border-neutral-200 bg-white p-4'>
         <div className='flex gap-3'>
-          <Avatar className='h-8 w-8'>
+          <Avatar className='h-8 w-8 cursor-pointer' onClick={handleUserClick}>
             {comment.avatarUrl ? <AvatarImage src={comment.avatarUrl} alt={displayName} /> : null}
             <AvatarFallback>{avatarFallback}</AvatarFallback>
           </Avatar>
           <div className='flex-1 space-y-2'>
             <div className='flex items-start justify-between gap-2'>
               <div className='flex flex-col text-xs text-neutral-900'>
-                <span className='font-semibold break-all'>{displayName}</span>
+                <span className='font-semibold break-all cursor-pointer' onClick={handleUserClick}>
+                  {displayName}
+                </span>
                 {timeLabel ? <span className='text-[11px] font-normal text-neutral-500'>{timeLabel}</span> : null}
               </div>
               {isAuthed ? (
@@ -446,6 +455,7 @@ const CommentItem = memo(function CommentItem({
                     isSameUsername={isSameUsername}
                     onReportComment={onReportComment}
                     onRequireAuth={onRequireAuth}
+                    onUserClick={onUserClick}
                     onToggleLike={handleLikeReply}
                     onReplyTo={handleReplyTo}
                     onDelete={handleDelete}

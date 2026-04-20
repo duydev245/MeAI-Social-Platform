@@ -216,6 +216,18 @@ function PostDetail() {
     [isAuthed]
   )
 
+  const handleUserClick = useCallback(
+    (username: string) => {
+      if (!isAuthed) {
+        setIsSignInOpen(true)
+        return
+      }
+      const userPath = PATH.USER_PROFILE.replace(':username', `@${username}`)
+      navigate(userPath)
+    },
+    [isAuthed, navigate]
+  )
+
   const handleSubmitComment = () => {
     if (!isAuthed) {
       setIsSignInOpen(true)
@@ -289,6 +301,7 @@ function PostDetail() {
               onReportPost={handleReportPost}
               onDeletePost={handleDeletePost}
               onRequireAuth={handleRequireAuth}
+              onUserClick={handleUserClick}
             />
 
             <div className='flex flex-col gap-4'>
@@ -337,6 +350,7 @@ function PostDetail() {
                   isPostOwner={isPostOwner}
                   onRequireAuth={handleRequireAuth}
                   onReportComment={handleReportComment}
+                  onUserClick={handleUserClick}
                 />
               )}
             </div>
