@@ -308,6 +308,7 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
                       ) : (
                         <img
                           src={item.url}
+                          loading='lazy'
                           alt='Post media'
                           className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full'
                         />

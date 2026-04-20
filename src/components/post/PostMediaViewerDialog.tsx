@@ -56,7 +56,12 @@ const PostMediaViewerDialog = React.memo(
                 isVideo(current) ? (
                   <video src={current.url} className='max-h-full w-auto max-w-full object-contain' controls autoPlay />
                 ) : (
-                  <img src={current.url} alt='Post media' className='max-h-full w-auto max-w-full object-contain' />
+                  <img
+                    src={current.url}
+                    loading='lazy'
+                    alt='Post media'
+                    className='max-h-full w-auto max-w-full object-contain'
+                  />
                 )
               ) : null}
             </div>
