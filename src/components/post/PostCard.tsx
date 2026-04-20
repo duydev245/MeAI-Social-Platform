@@ -122,10 +122,6 @@ const PostCard = React.memo(
                   <Copy className='h-4 w-4' />
                   Copy link
                 </DropdownMenuItem>
-                <DropdownMenuItem className='gap-2' onClick={handleReport}>
-                  <Flag className='h-4 w-4' />
-                  Report
-                </DropdownMenuItem>
                 {post.canDelete ? (
                   <>
                     <DropdownMenuItem className='gap-2' onClick={handleEdit}>
@@ -137,7 +133,12 @@ const PostCard = React.memo(
                       Delete post
                     </DropdownMenuItem>
                   </>
-                ) : null}
+                ) : (
+                  <DropdownMenuItem className='gap-2' onClick={handleReport}>
+                    <Flag className='h-4 w-4' />
+                    Report
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
