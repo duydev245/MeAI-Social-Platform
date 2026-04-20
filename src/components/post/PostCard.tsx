@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import PostMediaScroller, { type PostMediaItem } from '@/components/post/PostMediaScroller'
+import PostContent from '@/components/post/PostContent'
 
 type PostCardProps = {
   post: TPostResponse
@@ -81,11 +82,7 @@ const PostCard = React.memo(({ post, onOpenDetail, onToggleLike, onOpenMedia }: 
           </DropdownMenu>
         </div>
 
-        {post.content ? (
-          <div className='text-sm text-neutral-800 whitespace-pre-wrap cursor-pointer' onClick={handleOpenDetail}>
-            {post.content}
-          </div>
-        ) : null}
+        {post.content ? <PostContent content={post.content} /> : null}
 
         {mediaItems.length ? (
           <PostMediaScroller items={mediaItems} fallbackType={post.mediaType} onOpenMedia={onOpenMedia} />
