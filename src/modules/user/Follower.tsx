@@ -193,64 +193,62 @@ function Follower() {
         ) : null}
       </section>
 
-      <section className='space-y-4'>
-        <Tabs defaultValue='followers' className='w-full'>
-          <TabsList variant='line' className='w-full justify-start gap-2'>
-            <TabsTrigger value='followers'>Followers</TabsTrigger>
-            <TabsTrigger value='following'>Following</TabsTrigger>
-          </TabsList>
+      <Tabs defaultValue='followers' className='w-full space-y-2'>
+        <TabsList variant='line' className='w-full justify-start gap-2'>
+          <TabsTrigger value='followers'>Followers</TabsTrigger>
+          <TabsTrigger value='following'>Following</TabsTrigger>
+        </TabsList>
 
-          <TabsContent value='followers' className='space-y-3'>
-            {followersQuery.isLoading ? (
-              <UserListSkeleton />
-            ) : followersQuery.isError ? (
-              renderErrorState('Unable to load followers right now.', () => followersQuery.refetch())
-            ) : followers.length === 0 ? (
-              renderEmptyState('No followers yet.')
-            ) : (
-              renderFollowGrid(followers)
-            )}
+        <TabsContent value='followers' className='space-y-3'>
+          {followersQuery.isLoading ? (
+            <UserListSkeleton />
+          ) : followersQuery.isError ? (
+            renderErrorState('Unable to load followers right now.', () => followersQuery.refetch())
+          ) : followers.length === 0 ? (
+            renderEmptyState('No followers yet.')
+          ) : (
+            renderFollowGrid(followers)
+          )}
 
-            {followersQuery.hasNextPage ? (
-              <div className='flex justify-center'>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => followersQuery.fetchNextPage()}
-                  disabled={followersQuery.isFetchingNextPage}
-                >
-                  {followersQuery.isFetchingNextPage ? 'Loading...' : 'Load more'}
-                </Button>
-              </div>
-            ) : null}
-          </TabsContent>
+          {followersQuery.hasNextPage ? (
+            <div className='flex justify-center'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => followersQuery.fetchNextPage()}
+                disabled={followersQuery.isFetchingNextPage}
+              >
+                {followersQuery.isFetchingNextPage ? 'Loading...' : 'Load more'}
+              </Button>
+            </div>
+          ) : null}
+        </TabsContent>
 
-          <TabsContent value='following' className='space-y-3'>
-            {followingQuery.isLoading ? (
-              <UserListSkeleton />
-            ) : followingQuery.isError ? (
-              renderErrorState('Unable to load following right now.', () => followingQuery.refetch())
-            ) : following.length === 0 ? (
-              renderEmptyState('You are not following anyone yet.')
-            ) : (
-              renderFollowGrid(following)
-            )}
+        <TabsContent value='following' className='space-y-3'>
+          {followingQuery.isLoading ? (
+            <UserListSkeleton />
+          ) : followingQuery.isError ? (
+            renderErrorState('Unable to load following right now.', () => followingQuery.refetch())
+          ) : following.length === 0 ? (
+            renderEmptyState('You are not following anyone yet.')
+          ) : (
+            renderFollowGrid(following)
+          )}
 
-            {followingQuery.hasNextPage ? (
-              <div className='flex justify-center'>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() => followingQuery.fetchNextPage()}
-                  disabled={followingQuery.isFetchingNextPage}
-                >
-                  {followingQuery.isFetchingNextPage ? 'Loading...' : 'Load more'}
-                </Button>
-              </div>
-            ) : null}
-          </TabsContent>
-        </Tabs>
-      </section>
+          {followingQuery.hasNextPage ? (
+            <div className='flex justify-center'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => followingQuery.fetchNextPage()}
+                disabled={followingQuery.isFetchingNextPage}
+              >
+                {followingQuery.isFetchingNextPage ? 'Loading...' : 'Load more'}
+              </Button>
+            </div>
+          ) : null}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
