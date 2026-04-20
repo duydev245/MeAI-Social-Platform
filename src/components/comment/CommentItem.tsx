@@ -1,6 +1,13 @@
 import { Flag, Heart, MessageCircle, Trash2 } from 'lucide-react'
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
-import { useInfiniteQuery, useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query'
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueries,
+  useQueryClient,
+  type InfiniteData,
+  type UseQueryResult
+} from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
 import type { TCommentResponse, TFeedCursor } from '@/models/feed.model'
 import { feedApi } from '@/apis/feed.api'
@@ -48,7 +55,6 @@ const updateCommentInPages = (
     pages: data.pages.map((page) => page.map((item) => (item.id === commentId ? updater(item) : item)))
   }
 }
-
 type CommentQueryKey = ReturnType<typeof feedKeys.postComments> | ReturnType<typeof feedKeys.commentReplies>
 type ToggleLikePayload = {
   commentId: string
@@ -105,7 +111,7 @@ const CommentItem = memo(function CommentItem({
 
   const replies = useMemo(() => repliesQuery.data?.pages.flat() ?? [], [repliesQuery.data])
 
-  const repliesByParent = useMemo(() => {
+  const baseRepliesByParent = useMemo<Map<string, TCommentResponse[]>>(() => {
     const map = new Map<string, TCommentResponse[]>()
     replies.forEach((reply) => {
       const parentId = reply.parentCommentId ?? comment.id
@@ -119,7 +125,52 @@ const CommentItem = memo(function CommentItem({
     return map
   }, [comment.id, replies])
 
-  const rootReplies = repliesByParent.get(comment.id) ?? []
+  const rootReplies = baseRepliesByParent.get(comment.id) ?? []
+
+  const replyTargets = useMemo<string[]>(
+    () => rootReplies.filter((reply) => reply.repliesCount > 0).map((reply) => reply.id),
+    [rootReplies]
+  )
+
+  const childRepliesQueries = useQueries({
+    queries: replyTargets.map((replyId) => ({
+      queryKey: feedKeys.commentReplies(replyId, repliesLimit),
+      enabled: isExpanded,
+      queryFn: () => feedApi.getCommentReplies(replyId, { limit: repliesLimit } as TFeedCursor)
+    }))
+  }) as UseQueryResult<TCommentResponse[], Error>[]
+
+  const childRepliesByParent = useMemo<Map<string, TCommentResponse[]>>(() => {
+    const map = new Map<string, TCommentResponse[]>()
+    replyTargets.forEach((replyId, index) => {
+      const data = childRepliesQueries[index]?.data ?? []
+      if (data.length) {
+        map.set(replyId, data)
+      }
+    })
+    return map
+  }, [childRepliesQueries, replyTargets])
+
+  const repliesByParent = useMemo<Map<string, TCommentResponse[]>>(() => {
+    const map = new Map<string, TCommentResponse[]>(baseRepliesByParent)
+
+    childRepliesByParent.forEach((list, parentId) => {
+      const existing = map.get(parentId)
+      if (!existing) {
+        map.set(parentId, [...list])
+        return
+      }
+      const seen = new Set(existing.map((item) => item.id))
+      list.forEach((item) => {
+        if (!seen.has(item.id)) {
+          existing.push(item)
+          seen.add(item.id)
+        }
+      })
+    })
+
+    return map
+  }, [baseRepliesByParent, childRepliesByParent])
 
   const displayName = useMemo(
     () => getDisplayName(comment.username, comment.userId, currentUsername),
@@ -181,6 +232,9 @@ const CommentItem = memo(function CommentItem({
       setReplyTargetId(comment.id)
       setReplyTargetName(getDisplayName(comment.username, comment.userId, currentUsername))
       queryClient.invalidateQueries({ queryKey: feedKeys.commentReplies(comment.id, repliesLimit) })
+      if (replyTargetId !== comment.id) {
+        queryClient.invalidateQueries({ queryKey: feedKeys.commentReplies(replyTargetId, repliesLimit) })
+      }
       queryClient.invalidateQueries({ queryKey: feedKeys.postComments(comment.postId, repliesLimit) })
       setIsExpanded(true)
     },

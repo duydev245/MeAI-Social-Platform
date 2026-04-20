@@ -49,6 +49,7 @@ const CommentReplyList = memo(
               currentUsername={currentUsername}
               canDelete={canDelete}
               canReport={canReport}
+              canReply
               onReportComment={onReportComment}
               onRequireAuth={onRequireAuth}
               onToggleLike={onToggleLike}
@@ -72,6 +73,7 @@ const CommentReplyList = memo(
                       currentUsername={currentUsername}
                       canDelete={childCanDelete}
                       canReport={childCanReport}
+                      canReply={false}
                       onReportComment={onReportComment}
                       onRequireAuth={onRequireAuth}
                       onToggleLike={onToggleLike}

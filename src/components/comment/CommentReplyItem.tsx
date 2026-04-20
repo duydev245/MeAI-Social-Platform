@@ -13,6 +13,7 @@ type CommentReplyItemProps = {
   currentUsername: string | null
   canDelete: boolean
   canReport: boolean
+  canReply?: boolean
   onReportComment: (comment: TCommentResponse) => void
   onRequireAuth: () => void
   onToggleLike: (reply: TCommentResponse) => void
@@ -29,6 +30,7 @@ const CommentReplyItem = memo(
     currentUsername,
     canDelete,
     canReport,
+    canReply = true,
     onReportComment,
     onRequireAuth,
     onToggleLike,
@@ -54,6 +56,7 @@ const CommentReplyItem = memo(
     }
 
     const handleReply = () => {
+      if (!canReply) return
       if (!isAuthed) {
         onRequireAuth()
         return
@@ -110,10 +113,12 @@ const CommentReplyItem = memo(
               <Heart className={heartClass} />
               {reply.likesCount}
             </button>
-            <button type='button' className='flex items-center gap-1 hover:text-neutral-900' onClick={handleReply}>
-              <MessageCircle className='h-3 w-3' />
-              Reply
-            </button>
+            {canReply ? (
+              <button type='button' className='flex items-center gap-1 hover:text-neutral-900' onClick={handleReply}>
+                <MessageCircle className='h-3 w-3' />
+                Reply
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

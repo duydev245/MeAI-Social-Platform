@@ -63,10 +63,7 @@ function UserLayoutContent({
 
   return (
     <>
-      <div className='relative min-h-screen bg-white text-neutral-900'>
-        <div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(15,23,42,0.08),transparent_55%)]' />
-        <div className='pointer-events-none absolute -top-32 right-0 h-72 w-72 rounded-full bg-neutral-900/5 blur-3xl' />
-
+      <div className='relative min-h-screen bg-[#f8fafc] text-neutral-900'>
         <UserMobileHeader
           displayName={displayName}
           displayEmail={displayEmail}
