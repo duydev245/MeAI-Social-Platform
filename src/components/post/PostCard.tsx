@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 
 type PostCardProps = {
   post: TPostResponse
+  isAuthed: boolean
   onOpenDetail: (post: TPostResponse) => void
   onToggleLike: (post: TPostResponse) => void
   onOpenMedia: (items: PostMediaItem[], index: number, fallbackType: string | null) => void
@@ -22,7 +23,16 @@ type PostCardProps = {
 }
 
 const PostCard = React.memo(
-  ({ post, onOpenDetail, onToggleLike, onOpenMedia, onEditPost, onReportPost, onDeletePost }: PostCardProps) => {
+  ({
+    post,
+    isAuthed,
+    onOpenDetail,
+    onToggleLike,
+    onOpenMedia,
+    onEditPost,
+    onReportPost,
+    onDeletePost
+  }: PostCardProps) => {
     const timeLabel = useMemo(() => formatRelativeTime(post.createdAt), [post.createdAt])
     const isLiked = Boolean(post.isLikedByCurrentUser)
     const heartClass = isLiked ? 'h-4 w-4 text-rose-500 fill-rose-500' : 'h-4 w-4'
@@ -122,23 +132,24 @@ const PostCard = React.memo(
                   <Copy className='h-4 w-4' />
                   Copy link
                 </DropdownMenuItem>
-                {post.canDelete ? (
-                  <>
-                    <DropdownMenuItem className='gap-2' onClick={handleEdit}>
-                      <Pencil className='h-4 w-4' />
-                      Edit post
+                {isAuthed &&
+                  (post.canDelete ? (
+                    <>
+                      <DropdownMenuItem className='gap-2' onClick={handleEdit}>
+                        <Pencil className='h-4 w-4' />
+                        Edit post
+                      </DropdownMenuItem>
+                      <DropdownMenuItem variant='destructive' className='gap-2' onClick={handleDelete}>
+                        <Trash2 className='h-4 w-4' />
+                        Delete post
+                      </DropdownMenuItem>
+                    </>
+                  ) : (
+                    <DropdownMenuItem className='gap-2' onClick={handleReport}>
+                      <Flag className='h-4 w-4' />
+                      Report
                     </DropdownMenuItem>
-                    <DropdownMenuItem variant='destructive' className='gap-2' onClick={handleDelete}>
-                      <Trash2 className='h-4 w-4' />
-                      Delete post
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <DropdownMenuItem className='gap-2' onClick={handleReport}>
-                    <Flag className='h-4 w-4' />
-                    Report
-                  </DropdownMenuItem>
-                )}
+                  ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

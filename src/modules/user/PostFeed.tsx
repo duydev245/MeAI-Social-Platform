@@ -196,6 +196,7 @@ function PostFeed() {
               <PostCard
                 key={post.id}
                 post={post}
+                isAuthed={isAuthed}
                 onOpenDetail={handleOpenDetail}
                 onToggleLike={handleToggleLike}
                 onOpenMedia={handleOpenMedia}
