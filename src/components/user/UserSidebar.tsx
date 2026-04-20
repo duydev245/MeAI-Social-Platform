@@ -20,6 +20,7 @@ type UserSidebarProps = {
   onLogoClick: () => void
   displayName: string
   displayEmail: string
+  profilePath: string
   avatarUrl?: string
   avatarFallback: string
 }
@@ -44,6 +45,7 @@ function UserSidebar({
   onLogoClick,
   displayName,
   displayEmail,
+  profilePath,
   avatarUrl,
   avatarFallback
 }: UserSidebarProps) {
@@ -139,6 +141,7 @@ function UserSidebar({
               side='right'
               displayName={displayName}
               displayEmail={displayEmail}
+              profilePath={profilePath}
               avatarUrl={avatarUrl}
               avatarFallback={avatarFallback}
             />

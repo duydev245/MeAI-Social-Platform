@@ -70,6 +70,7 @@ function UserLayoutContent({
         <UserMobileHeader
           displayName={displayName}
           displayEmail={displayEmail}
+          profilePath={profilePath}
           avatarUrl={avatarUrl}
           avatarFallback={avatarFallback}
           isAuthed={isAuthed}
@@ -85,6 +86,7 @@ function UserLayoutContent({
             onRequireAuth={handleRequireAuth}
             displayName={displayName}
             displayEmail={displayEmail}
+            profilePath={profilePath}
             avatarUrl={avatarUrl}
             avatarFallback={avatarFallback}
             onLogoClick={handleLogoClick}

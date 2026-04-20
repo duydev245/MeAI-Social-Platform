@@ -34,7 +34,7 @@ const ProtectedRoutes = ({ roleAccess, children }: ProtectedRoutesProps) => {
   const storedUser = useSelector((state: RootState) => state.currentUser.currentUser)
 
   if (!storedUser) {
-    return <Navigate to={PATH.HOME} replace />
+    return <Navigate to={PATH.AUTH} replace />
   }
 
   if (roleAccess && !storedUser.roles?.includes(roleAccess)) {

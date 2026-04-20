@@ -5,6 +5,7 @@ import UserMenuContent from '@/components/user/UserMenuContent'
 type UserMobileHeaderProps = {
   displayName: string
   displayEmail: string
+  profilePath: string
   avatarUrl?: string
   avatarFallback: string
   isAuthed: boolean
@@ -15,6 +16,7 @@ type UserMobileHeaderProps = {
 function UserMobileHeader({
   displayName,
   displayEmail,
+  profilePath,
   avatarUrl,
   avatarFallback,
   isAuthed,
@@ -41,6 +43,7 @@ function UserMobileHeader({
             side='bottom'
             displayName={displayName}
             displayEmail={displayEmail}
+            profilePath={profilePath}
             avatarUrl={avatarUrl}
             avatarFallback={avatarFallback}
           />
