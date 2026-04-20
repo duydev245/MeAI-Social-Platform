@@ -7,10 +7,13 @@ import type { TPostResponse } from '@/models/feed.model'
 import { PATH } from '@/routes/path'
 import { useFeedInfiniteQuery, useToggleLike } from '@/hooks/use-feed'
 import CreatePostDialog from '@/components/post/CreatePostDialog'
+import DeletePostDialog from '@/components/post/DeletePostDialog'
+import EditPostDialog from '@/components/post/EditPostDialog'
 import PostCard from '@/components/post/PostCard'
 import PostFeedEmptyState from '@/components/post/PostFeedEmptyState'
 import PostFeedSkeleton from '@/components/post/PostFeedSkeleton'
 import PostMediaViewerDialog from '@/components/post/PostMediaViewerDialog'
+import ReportPostDialog from '@/components/post/ReportPostDialog'
 import type { PostMediaItem } from '@/components/post/PostMediaScroller'
 import SignInRequiredDialog from '@/components/user/SignInRequiredDialog'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -38,6 +41,9 @@ function PostFeed() {
   const avatarFallback = useMemo(() => displayName.slice(0, 2).toUpperCase(), [displayName])
   const [isComposerOpen, setIsComposerOpen] = useState(false)
   const [isSignInOpen, setIsSignInOpen] = useState(false)
+  const [editingPost, setEditingPost] = useState<TPostResponse | null>(null)
+  const [reportingPost, setReportingPost] = useState<TPostResponse | null>(null)
+  const [deletingPost, setDeletingPost] = useState<TPostResponse | null>(null)
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
   const [mediaViewer, setMediaViewer] = useState<MediaViewerState>({
     open: false,
@@ -93,6 +99,39 @@ function PostFeed() {
       index: Math.min(current.items.length - 1, current.index + 1)
     }))
   }, [])
+
+  const handleEditPost = useCallback(
+    (post: TPostResponse) => {
+      if (!isAuthed) {
+        setIsSignInOpen(true)
+        return
+      }
+      setEditingPost(post)
+    },
+    [isAuthed]
+  )
+
+  const handleReportPost = useCallback(
+    (post: TPostResponse) => {
+      if (!isAuthed) {
+        setIsSignInOpen(true)
+        return
+      }
+      setReportingPost(post)
+    },
+    [isAuthed]
+  )
+
+  const handleDeletePost = useCallback(
+    (post: TPostResponse) => {
+      if (!isAuthed) {
+        setIsSignInOpen(true)
+        return
+      }
+      setDeletingPost(post)
+    },
+    [isAuthed]
+  )
 
   useEffect(() => {
     if (!isAuthed || !feedQuery.hasNextPage) return
@@ -160,6 +199,9 @@ function PostFeed() {
                 onOpenDetail={handleOpenDetail}
                 onToggleLike={handleToggleLike}
                 onOpenMedia={handleOpenMedia}
+                onEditPost={handleEditPost}
+                onReportPost={handleReportPost}
+                onDeletePost={handleDeletePost}
               />
             ))}
           </div>
@@ -169,6 +211,21 @@ function PostFeed() {
       </div>
 
       <CreatePostDialog open={isComposerOpen} onOpenChange={setIsComposerOpen} />
+      <EditPostDialog
+        open={Boolean(editingPost)}
+        post={editingPost}
+        onOpenChange={(open) => setEditingPost((current) => (open ? current : null))}
+      />
+      <ReportPostDialog
+        open={Boolean(reportingPost)}
+        post={reportingPost}
+        onOpenChange={(open) => setReportingPost((current) => (open ? current : null))}
+      />
+      <DeletePostDialog
+        open={Boolean(deletingPost)}
+        post={deletingPost}
+        onOpenChange={(open) => setDeletingPost((current) => (open ? current : null))}
+      />
       <SignInRequiredDialog open={isSignInOpen} onOpenChange={setIsSignInOpen} />
       <PostMediaViewerDialog
         open={mediaViewer.open}

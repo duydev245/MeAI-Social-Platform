@@ -55,3 +55,34 @@ export type TCreatePostPayload = {
 }
 
 export type TCreatePostResponse = TResult<TPostResponse>
+
+export type TDeletePostResponse = TResult<null>
+
+export type TUpdatePostPayload = {
+  content: string | null
+}
+
+export type TUpdatePostResponse = TResult<TPostResponse>
+
+export type TReportTargetType = 'Post' | 'Comment'
+
+export type TReportPayload = {
+  targetType: TReportTargetType
+  targetId: string
+  reason: string
+}
+
+export type TReportResponse = {
+  id: string
+  reporterId: string
+  targetType: TReportTargetType
+  targetId: string
+  reason: string
+  status: string
+  reviewedByAdminId: string | null
+  reviewedAt: string | null
+  resolutionNote: string | null
+  actionType: string | null
+  createdAt: string | null
+  updatedAt: string | null
+}
