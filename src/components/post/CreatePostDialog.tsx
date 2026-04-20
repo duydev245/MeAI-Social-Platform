@@ -196,7 +196,7 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
-        className='sm:max-w-xl max-h-[95vh] overflow-y-auto'
+        className='w-[96vw] sm:max-w-xl max-h-[90vh] sm:max-h-[95vh] overflow-y-auto'
         showCloseButton={!isBusy}
         onInteractOutside={(event) => {
           if (isBusy) event.preventDefault()
@@ -253,12 +253,17 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
                       className='relative shrink-0 overflow-hidden rounded-lg border'
                     >
                       {item.kind === 'video' ? (
-                        <video src={item.previewUrl} className='h-auto max-h-64 w-auto max-w-full' controls autoPlay />
+                        <video
+                          src={item.previewUrl}
+                          className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full'
+                          controls
+                          autoPlay
+                        />
                       ) : (
                         <img
                           src={item.previewUrl}
                           alt={item.file.name}
-                          className='h-auto max-h-64 w-auto max-w-full'
+                          className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full'
                           draggable={false}
                         />
                       )}

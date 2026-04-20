@@ -36,37 +36,34 @@ const PostMediaViewerDialog = React.memo(
 
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className='w-[96vw]! max-w-300! h-[92vh]! max-h-[92vh]! p-0! flex flex-col overflow-hidden'>
-          <DialogHeader className='items-center px-4 pt-4 pb-2'>
+        <DialogContent className='!w-[100vw] !max-w-none !h-[100vh] !max-h-none !p-0 flex flex-col overflow-hidden sm:!w-[96vw] sm:!max-w-[1200px] sm:!h-[92vh] sm:!max-h-[92vh]'>
+          <DialogHeader className='items-center px-3 sm:px-4 pt-4 pb-2'>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
-          <div className='flex flex-1 items-center justify-between w-full bg-white px-4 pb-4 pt-2'>
+          <div className='flex flex-1 items-center justify-between w-full bg-white px-3 sm:px-4 pb-4 pt-2 overflow-hidden'>
             <Button
               variant='outline'
               size='icon'
-              className='rounded-full cursor-pointer'
+              className='rounded-full cursor-pointer shrink-0'
               onClick={onPrev}
               disabled={!hasPrev}
               aria-label='Previous media'
             >
               <ChevronLeft className='h-4 w-4' />
             </Button>
-            {current ? (
-              isVideo(current) ? (
-                <video
-                  src={current.url}
-                  className='h-130 max-h-full w-auto max-w-full object-contain'
-                  controls
-                  autoPlay
-                />
-              ) : (
-                <img src={current.url} alt='Post media' className='h-130 max-h-full w-auto max-w-full object-contain' />
-              )
-            ) : null}
+            <div className='flex-1 min-w-0 flex items-center justify-center'>
+              {current ? (
+                isVideo(current) ? (
+                  <video src={current.url} className='max-h-full w-full max-w-full object-contain' controls autoPlay />
+                ) : (
+                  <img src={current.url} alt='Post media' className='max-h-full w-full max-w-full object-contain' />
+                )
+              ) : null}
+            </div>
             <Button
               variant='outline'
               size='icon'
-              className='rounded-full cursor-pointer'
+              className='rounded-full cursor-pointer shrink-0'
               onClick={onNext}
               disabled={!hasNext}
               aria-label='Next media'

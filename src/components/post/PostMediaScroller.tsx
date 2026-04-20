@@ -84,13 +84,18 @@ const PostMediaScroller = React.memo(({ items, fallbackType, onOpenMedia }: Post
       {items.map((item, index) => (
         <div
           key={item.url}
-          className='relative shrink-0 overflow-hidden rounded-lg border cursor-pointer'
+          className='relative shrink-0 overflow-hidden rounded-lg border cursor-pointer max-w-[80vw] sm:max-w-full'
           onClick={(event) => handleItemClick(event, index)}
         >
           {isVideo(item) ? (
-            <video src={item.url} className='h-auto max-h-64 w-auto max-w-full' controls />
+            <video src={item.url} className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full' />
           ) : (
-            <img src={item.url} alt='Post media' className='h-auto max-h-64 w-auto max-w-full' draggable={false} />
+            <img
+              src={item.url}
+              alt='Post media'
+              className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full'
+              draggable={false}
+            />
           )}
         </div>
       ))}

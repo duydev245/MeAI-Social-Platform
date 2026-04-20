@@ -52,14 +52,14 @@ const PostCard = React.memo(({ post, onOpenDetail, onToggleLike, onOpenMedia }: 
 
   return (
     <Card className='border-neutral-200 bg-white transition hover:shadow-sm'>
-      <CardContent className='flex flex-col gap-4'>
+      <CardContent className='flex flex-col gap-3 sm:gap-4'>
         <div className='flex items-start justify-between gap-3 cursor-pointer' onClick={handleOpenDetail}>
           <div className='flex items-center justify-start gap-2' onClick={(event) => event.stopPropagation()}>
-            <Avatar>
+            <Avatar className='h-9 w-9 sm:h-10 sm:w-10'>
               {post.avatarUrl ? <AvatarImage src={post.avatarUrl} alt={post.username} /> : null}
               <AvatarFallback>{post.username.slice(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
-            <div className='flex flex-col items-start text-sm font-semibold text-neutral-900'>
+            <div className='flex flex-col items-start text-xs sm:text-sm font-semibold text-neutral-900'>
               <span className='break-all'>{post.username}</span>
               {timeLabel ? <span className='text-xs font-normal text-neutral-500'>{timeLabel}</span> : null}
             </div>
@@ -91,7 +91,7 @@ const PostCard = React.memo(({ post, onOpenDetail, onToggleLike, onOpenMedia }: 
           <PostMediaScroller items={mediaItems} fallbackType={post.mediaType} onOpenMedia={onOpenMedia} />
         ) : null}
 
-        <div className='flex items-center gap-6 text-sm text-neutral-600'>
+        <div className='flex items-center gap-4 sm:gap-6 text-xs sm:text-sm text-neutral-600'>
           <button
             type='button'
             className='flex items-center gap-2 transition hover:text-neutral-900 cursor-pointer'
