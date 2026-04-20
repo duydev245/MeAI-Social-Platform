@@ -88,3 +88,37 @@ export type TReportResponse = {
   createdAt: string | null
   updatedAt: string | null
 }
+
+export type TCommentResponse = {
+  id: string
+  postId: string
+  userId: string
+  parentCommentId: string | null
+  username: string | null
+  avatarUrl: string | null
+  content: string
+  likesCount: number
+  repliesCount: number
+  createdAt: string | null
+  updatedAt: string | null
+  isLikedByCurrentUser: boolean | null
+  canDelete: boolean | null
+}
+
+export type TCommentLikeResponse = {
+  commentId: string
+  likesCount: number
+  isLikedByCurrentUser: boolean
+}
+
+export type TCreateCommentPayload = {
+  postId: string
+  content: string
+}
+
+export type TCreateReplyPayload = {
+  content: string
+}
+
+export type TCreateCommentResponse = TResult<TCommentResponse>
+export type TCreateReplyResponse = TResult<TCommentResponse>

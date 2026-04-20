@@ -15,7 +15,10 @@ type ToggleLikePayload = {
 
 export const feedKeys = {
   all: ['feed'] as const,
-  list: (limit: number) => ['feed', 'list', { limit }] as const
+  list: (limit: number) => ['feed', 'list', { limit }] as const,
+  detail: (postId: string) => ['feed', 'detail', postId] as const,
+  postComments: (postId: string, limit: number) => ['feed', 'comments', postId, { limit }] as const,
+  commentReplies: (commentId: string, limit: number) => ['feed', 'replies', commentId, { limit }] as const
 }
 
 const getNextCursor = (posts: TPostResponse[], limit: number): TFeedCursor | undefined => {
