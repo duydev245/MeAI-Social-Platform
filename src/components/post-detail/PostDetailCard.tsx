@@ -19,10 +19,20 @@ type PostDetailCardProps = {
   onEditPost: (post: TPostResponse) => void
   onReportPost: (post: TPostResponse) => void
   onDeletePost: (post: TPostResponse) => void
+  onRequireAuth: () => void
 }
 
 const PostDetailCard = React.memo(
-  ({ post, isAuthed, onToggleLike, onOpenMedia, onEditPost, onReportPost, onDeletePost }: PostDetailCardProps) => {
+  ({
+    post,
+    isAuthed,
+    onToggleLike,
+    onOpenMedia,
+    onEditPost,
+    onReportPost,
+    onDeletePost,
+    onRequireAuth
+  }: PostDetailCardProps) => {
     const timeLabel = useMemo(() => formatRelativeTime(post.createdAt), [post.createdAt])
     const isLiked = Boolean(post.isLikedByCurrentUser)
     const heartClass = isLiked ? 'h-4 w-4 text-rose-500 fill-rose-500' : 'h-4 w-4'
@@ -41,7 +51,18 @@ const PostDetailCard = React.memo(
       return []
     }, [post.media, post.mediaUrl, post.mediaType])
 
-    const handleLike = useCallback(() => onToggleLike(post), [onToggleLike, post])
+    const handleLike = useCallback(() => {
+      if (!isAuthed) {
+        onRequireAuth()
+        return
+      }
+      onToggleLike(post)
+    }, [isAuthed, onRequireAuth, onToggleLike, post])
+    const handleCommentClick = useCallback(() => {
+      if (!isAuthed) {
+        onRequireAuth()
+      }
+    }, [isAuthed, onRequireAuth])
 
     const handleReport = useCallback(() => onReportPost(post), [onReportPost, post])
 
@@ -118,10 +139,14 @@ const PostDetailCard = React.memo(
               <Heart className={heartClass} />
               {post.likesCount}
             </button>
-            <div className='flex items-center gap-2 text-neutral-500'>
+            <button
+              type='button'
+              className='flex items-center gap-2 text-neutral-500 hover:text-neutral-900'
+              onClick={handleCommentClick}
+            >
               <MessageCircle className='h-4 w-4' />
               {post.commentsCount}
-            </div>
+            </button>
           </div>
         </CardContent>
       </Card>

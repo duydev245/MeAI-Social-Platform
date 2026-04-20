@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query'
 import type { TFeedCursor, TCommentResponse } from '@/models/feed.model'
 import { feedApi } from '@/apis/feed.api'
 import { feedKeys } from '@/hooks/use-feed'
@@ -31,11 +31,17 @@ const getNextCursor = (items: TCommentResponse[], limit: number): TFeedCursor | 
 function CommentList({ postId, limit = 10, isAuthed, isPostOwner, onRequireAuth, onReportComment }: CommentListProps) {
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
-  const commentsQuery = useInfiniteQuery({
+  const commentsQuery = useInfiniteQuery<
+    TCommentResponse[],
+    Error,
+    InfiniteData<TCommentResponse[]>,
+    ReturnType<typeof feedKeys.postComments>,
+    TFeedCursor
+  >({
     queryKey: feedKeys.postComments(postId, limit),
     enabled: Boolean(postId),
-    initialPageParam: { limit },
-    queryFn: ({ pageParam }) => feedApi.getPostComments(postId, pageParam as TFeedCursor),
+    initialPageParam: { limit } as TFeedCursor,
+    queryFn: ({ pageParam }) => feedApi.getPostComments(postId, pageParam),
     getNextPageParam: (lastPage) => {
       if (!lastPage.length) return undefined
       return getNextCursor(lastPage, limit)

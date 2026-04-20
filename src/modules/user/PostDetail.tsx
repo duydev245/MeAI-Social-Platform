@@ -22,18 +22,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog'
 import type { PostMediaItem } from '@/components/post/PostMediaScroller'
 import { toast } from 'sonner'
+import InvalidPostDialog from '@/components/post-detail/InvalidPostDialog'
 
 const COMMENT_LIMIT = 10
 
@@ -297,6 +288,7 @@ function PostDetail() {
               onEditPost={handleEditPost}
               onReportPost={handleReportPost}
               onDeletePost={handleDeletePost}
+              onRequireAuth={handleRequireAuth}
             />
 
             <div className='flex flex-col gap-4'>
@@ -330,43 +322,33 @@ function PostDetail() {
                 <Card className='border-neutral-200 bg-white'>
                   <CardContent className='flex items-center justify-between gap-4 text-sm text-neutral-600'>
                     <span>Sign in to join the conversation.</span>
-                    <Button variant='outline' size='sm' onClick={handleRequireAuth}>
+                    <Button variant='outline' size='sm' onClick={() => navigate(PATH.LOGIN)}>
                       Sign in
                     </Button>
                   </CardContent>
                 </Card>
               )}
 
-              <CommentList
-                postId={postId}
-                limit={COMMENT_LIMIT}
-                isAuthed={isAuthed}
-                isPostOwner={isPostOwner}
-                onRequireAuth={handleRequireAuth}
-                onReportComment={handleReportComment}
-              />
+              {isAuthed && (
+                <CommentList
+                  postId={postId}
+                  limit={COMMENT_LIMIT}
+                  isAuthed={isAuthed}
+                  isPostOwner={isPostOwner}
+                  onRequireAuth={handleRequireAuth}
+                  onReportComment={handleReportComment}
+                />
+              )}
             </div>
           </>
         )}
       </div>
 
-      <AlertDialog open={isInvalid} onOpenChange={handleInvalidOpenChange}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <ArrowLeft className='h-5 w-5 text-neutral-700' />
-            </AlertDialogMedia>
-            <AlertDialogTitle>Invalid page</AlertDialogTitle>
-            <AlertDialogDescription>
-              This post does not match the username in the URL. Please return to the homepage.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={handleInvalidClose}>Back to home</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
+      <InvalidPostDialog
+        isInvalid={isInvalid}
+        handleInvalidOpenChange={handleInvalidOpenChange}
+        handleInvalidClose={handleInvalidClose}
+      />
       <EditPostDialog
         open={Boolean(editingPost)}
         post={editingPost}
