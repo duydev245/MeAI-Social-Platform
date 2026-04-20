@@ -90,8 +90,8 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
                 const loaded = event.loaded ?? 0
                 loadedByIndex[index] = loaded
                 const totalLoaded = loadedByIndex.reduce((sum, value) => sum + value, 0)
-                const percent = totalBytes ? Math.min(100, Math.round((totalLoaded / totalBytes) * 100)) : 100
-                setProgressPercent(percent)
+                const percent = totalBytes ? Math.round((totalLoaded / totalBytes) * 90) : 90
+                setProgressPercent(Math.min(90, percent))
               }
             })
           )
@@ -101,13 +101,15 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
           .filter((value): value is string => Boolean(value))
       }
 
-      setProgressPercent(100)
+      setProgressPercent(95)
       setProgressLabel('Creating post...')
-      return feedApi.createPost({
+      const response = await feedApi.createPost({
         content: trimmedContent,
         resourceIds,
         mediaType: getMediaType(mediaItems)
       })
+      setProgressPercent(100)
+      return response
     },
     onSuccess: () => {
       toast.success('Post created')
@@ -211,7 +213,6 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
                 <div className='h-2 w-full overflow-hidden rounded-full bg-neutral-200'>
                   <div className='h-full bg-neutral-900 transition-[width]' style={{ width: `${progressPercent}%` }} />
                 </div>
-                <div className='text-xs text-neutral-500'>{progressPercent}%</div>
               </div>
             </div>
           ) : null}
@@ -252,7 +253,7 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
                       className='relative shrink-0 overflow-hidden rounded-lg border'
                     >
                       {item.kind === 'video' ? (
-                        <video src={item.previewUrl} className='h-auto max-h-64 w-auto max-w-full' controls />
+                        <video src={item.previewUrl} className='h-auto max-h-64 w-auto max-w-full' controls autoPlay />
                       ) : (
                         <img
                           src={item.previewUrl}
@@ -298,7 +299,7 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
               </div>
             </div>
           </div>
-          <div className='flex justify-end border-t pt-3'>
+          <div className='flex justify-end border-t mt-3 pt-3'>
             <Button className='w-fit' onClick={handleSubmit} disabled={!canSubmit || isBusy}>
               {createPostMutation.isPending ? <Loader2 className='h-4 w-4 animate-spin' /> : null}
               Post

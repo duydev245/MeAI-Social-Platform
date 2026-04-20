@@ -1,0 +1,117 @@
+import React, { useCallback, useMemo } from 'react'
+import { Heart, MessageCircle, MoreHorizontal } from 'lucide-react'
+import type { TPostResponse } from '@/models/feed.model'
+import { formatRelativeTime } from '@/utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import PostMediaScroller, { type PostMediaItem } from '@/components/post/PostMediaScroller'
+
+type PostCardProps = {
+  post: TPostResponse
+  onOpenDetail: (post: TPostResponse) => void
+  onToggleLike: (post: TPostResponse) => void
+  onOpenMedia: (items: PostMediaItem[], index: number, fallbackType: string | null) => void
+}
+
+const PostCard = React.memo(({ post, onOpenDetail, onToggleLike, onOpenMedia }: PostCardProps) => {
+  const timeLabel = useMemo(() => formatRelativeTime(post.createdAt), [post.createdAt])
+  const isLiked = Boolean(post.isLikedByCurrentUser)
+  const heartClass = isLiked ? 'h-4 w-4 text-rose-500 fill-rose-500' : 'h-4 w-4'
+
+  const mediaItems = useMemo<PostMediaItem[]>(() => {
+    if (post.media?.length) {
+      return post.media.map((item) => ({
+        url: item.presignedUrl,
+        contentType: item.contentType,
+        resourceType: item.resourceType
+      }))
+    }
+    if (post.mediaUrl) {
+      return [{ url: post.mediaUrl, contentType: null, resourceType: post.mediaType }]
+    }
+    return []
+  }, [post.media, post.mediaUrl, post.mediaType])
+
+  const handleOpenDetail = useCallback(() => onOpenDetail(post), [onOpenDetail, post])
+  const handleLike = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation()
+      onToggleLike(post)
+    },
+    [onToggleLike, post]
+  )
+  const handleComment = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation()
+      onOpenDetail(post)
+    },
+    [onOpenDetail, post]
+  )
+
+  return (
+    <Card className='border-neutral-200 bg-white transition hover:shadow-sm'>
+      <CardContent className='flex flex-col gap-4'>
+        <div className='flex items-start justify-between gap-3 cursor-pointer' onClick={handleOpenDetail}>
+          <div className='flex items-center justify-start gap-2' onClick={(event) => event.stopPropagation()}>
+            <Avatar>
+              {post.avatarUrl ? <AvatarImage src={post.avatarUrl} alt={post.username} /> : null}
+              <AvatarFallback>{post.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className='flex flex-col items-start text-sm font-semibold text-neutral-900'>
+              <span className='break-all'>{post.username}</span>
+              {timeLabel ? <span className='text-xs font-normal text-neutral-500'>{timeLabel}</span> : null}
+            </div>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant='ghost'
+                size='icon-sm'
+                aria-label='Open post menu'
+                onClick={(event) => event.stopPropagation()}
+              >
+                <MoreHorizontal className='h-4 w-4' />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuItem>Copy link</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {post.content ? (
+          <div className='text-sm text-neutral-800 whitespace-pre-wrap cursor-pointer' onClick={handleOpenDetail}>
+            {post.content}
+          </div>
+        ) : null}
+
+        {mediaItems.length ? (
+          <PostMediaScroller items={mediaItems} fallbackType={post.mediaType} onOpenMedia={onOpenMedia} />
+        ) : null}
+
+        <div className='flex items-center gap-6 text-sm text-neutral-600'>
+          <button
+            type='button'
+            className='flex items-center gap-2 transition hover:text-neutral-900 cursor-pointer'
+            onClick={handleLike}
+          >
+            <Heart className={heartClass} />
+            {post.likesCount}
+          </button>
+          <button
+            type='button'
+            className='flex items-center gap-2 transition hover:text-neutral-900 cursor-pointer'
+            onClick={handleComment}
+          >
+            <MessageCircle className='h-4 w-4' />
+            {post.commentsCount}
+          </button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
+
+export default PostCard
