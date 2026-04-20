@@ -128,10 +128,10 @@ const PostCard = React.memo(
                 </DropdownMenuItem>
                 {post.canDelete ? (
                   <>
-                    {/* <DropdownMenuItem className='gap-2' onClick={handleEdit}>
+                    <DropdownMenuItem className='gap-2' onClick={handleEdit}>
                       <Pencil className='h-4 w-4' />
                       Edit post
-                    </DropdownMenuItem> */}
+                    </DropdownMenuItem>
                     <DropdownMenuItem variant='destructive' className='gap-2' onClick={handleDelete}>
                       <Trash2 className='h-4 w-4' />
                       Delete post

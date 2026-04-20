@@ -6,7 +6,6 @@ import type {
   TFeedCursor,
   TPostLikeResponse,
   TPostResponse,
-  TDeletePostResponse,
   TReportPayload,
   TReportResponse,
   TUpdatePostPayload,
@@ -40,7 +39,7 @@ export const feedApi = {
   },
 
   async updatePost(postId: string, payload: TUpdatePostPayload) {
-    const response = await fetcher.patch<TUpdatePostResponse>(`/api/Feed/posts/${postId}`, payload)
+    const response = await fetcher.put<TUpdatePostResponse>(`/api/Feed/posts/${postId}`, payload)
     return response.data.value
   },
 

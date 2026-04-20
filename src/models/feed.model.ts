@@ -60,6 +60,8 @@ export type TDeletePostResponse = TResult<null>
 
 export type TUpdatePostPayload = {
   content: string | null
+  resourceIds: string[]
+  mediaType: TPostMediaType
 }
 
 export type TUpdatePostResponse = TResult<TPostResponse>
