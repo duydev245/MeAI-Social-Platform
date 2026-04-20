@@ -36,7 +36,7 @@ const PostMediaViewerDialog = React.memo(
 
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className='!w-[100vw] !max-w-none !h-[100vh] !max-h-none !p-0 flex flex-col overflow-hidden sm:!w-[96vw] sm:!max-w-[1200px] sm:!h-[92vh] sm:!max-h-[92vh]'>
+        <DialogContent className='w-screen! max-w-none! h-screen! max-h-none! p-0! flex flex-col overflow-hidden sm:w-[96vw]! sm:max-w-300! sm:h-[92vh]! sm:max-h-[92vh]!'>
           <DialogHeader className='items-center px-3 sm:px-4 pt-4 pb-2'>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
