@@ -93,7 +93,7 @@ function UserLayoutContent({
           />
 
           <main className='flex flex-1 justify-center'>
-            <div className='mb-18 w-full md:mb-0 md:max-w-3xl'>{children}</div>
+            <div className='mb-18 w-full max-w-[100vw] md:mb-0 md:max-w-3xl'>{children}</div>
           </main>
         </div>
 
