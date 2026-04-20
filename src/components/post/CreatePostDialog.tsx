@@ -257,11 +257,11 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
                           src={item.previewUrl}
                           className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full'
                           controls
-                          autoPlay
                         />
                       ) : (
                         <img
                           src={item.previewUrl}
+                          loading='lazy'
                           alt={item.file.name}
                           className='h-auto max-h-48 sm:max-h-64 w-auto max-w-full'
                           draggable={false}
