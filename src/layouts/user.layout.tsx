@@ -40,7 +40,7 @@ function UserLayoutContent({
       { label: 'For you', to: PATH.HOME, icon: Home, end: true },
       { label: 'Followers', to: PATH.USER_FOLLOWERS, icon: Users, requiresAuth: true },
       { label: 'Activity', to: PATH.USER_ACTIVITY, icon: Heart, requiresAuth: true, hasIndicator: hasUnread },
-      { label: 'Profile', to: profilePath, icon: User, requiresAuth: true }
+      { label: 'Profile', to: profilePath, icon: User, requiresAuth: true, end: true }
     ],
     [profilePath, hasUnread]
   )
