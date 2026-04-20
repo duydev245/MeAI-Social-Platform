@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo } from 'react'
-import { Heart, MessageCircle, MoreHorizontal } from 'lucide-react'
+import { Copy, Flag, Heart, MessageCircle, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 import type { TPostResponse } from '@/models/feed.model'
 import { formatRelativeTime } from '@/utils'
+import { PATH } from '@/routes/path'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import PostMediaScroller, { type PostMediaItem } from '@/components/post/PostMediaScroller'
 import PostContent from '@/components/post/PostContent'
+import { toast } from 'sonner'
 
 type PostCardProps = {
   post: TPostResponse
@@ -51,6 +53,17 @@ const PostCard = React.memo(({ post, onOpenDetail, onToggleLike, onOpenMedia }: 
     [onOpenDetail, post]
   )
 
+  const handleCopyLink = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation()
+      const detailPath = PATH.POST_DETAIL.replace(':username', `@${post.username}`).replace(':postId', post.id)
+      const url = `${window.location.origin}${detailPath}`
+      void navigator.clipboard?.writeText(url)
+      toast.success('Copy link successfully')
+    },
+    [post.id, post.username]
+  )
+
   return (
     <Card className='border-neutral-200 bg-white transition hover:shadow-sm'>
       <CardContent className='flex flex-col gap-3 sm:gap-4'>
@@ -77,7 +90,26 @@ const PostCard = React.memo(({ post, onOpenDetail, onToggleLike, onOpenMedia }: 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem>Copy link</DropdownMenuItem>
+              <DropdownMenuItem className='gap-2' onClick={handleCopyLink}>
+                <Copy className='h-4 w-4' />
+                Copy link
+              </DropdownMenuItem>
+              <DropdownMenuItem className='gap-2'>
+                <Flag className='h-4 w-4' />
+                Report
+              </DropdownMenuItem>
+              {post.canDelete ? (
+                <>
+                  <DropdownMenuItem className='gap-2'>
+                    <Pencil className='h-4 w-4' />
+                    Edit post
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant='destructive' className='gap-2'>
+                    <Trash2 className='h-4 w-4' />
+                    Delete post
+                  </DropdownMenuItem>
+                </>
+              ) : null}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

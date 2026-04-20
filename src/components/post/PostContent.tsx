@@ -71,7 +71,6 @@ const PostContent = React.memo(({ content, maxLines = 4 }: PostContentProps) => 
 
   useEffect(() => {
     if (isExpanded) {
-      setCanExpand(false)
       return
     }
 
@@ -104,13 +103,13 @@ const PostContent = React.memo(({ content, maxLines = 4 }: PostContentProps) => 
       >
         {nodes}
       </div>
-      {!isExpanded && canExpand ? (
+      {canExpand ? (
         <button
           type='button'
           className='text-xs font-semibold text-neutral-900 hover:underline'
-          onClick={() => setIsExpanded(true)}
+          onClick={() => setIsExpanded((current) => !current)}
         >
-          Show more
+          {isExpanded ? 'Show less' : 'Show more'}
         </button>
       ) : null}
     </div>
