@@ -32,7 +32,7 @@ const renderIcon = (Icon: LucideIcon, hasIndicator?: boolean) => (
   <span className='relative'>
     <Icon className='h-4 w-4' />
     {hasIndicator ? (
-      <span aria-hidden='true' className='absolute -right-0.5 -bottom-0.5 h-2 w-2 rounded-full bg-red-500' />
+      <span aria-hidden='true' className='absolute -right-0.5 top-0 h-2 w-2 rounded-full bg-red-500/90' />
     ) : null}
   </span>
 )

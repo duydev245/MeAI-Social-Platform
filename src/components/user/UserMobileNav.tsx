@@ -27,7 +27,7 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
       <span className='relative'>
         <Icon className='h-4 w-4' />
         {item.hasIndicator ? (
-          <span aria-hidden='true' className='absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500' />
+          <span aria-hidden='true' className='absolute -right-px top-px h-1.5 w-1.5 rounded-full bg-red-500/90' />
         ) : null}
       </span>
     )

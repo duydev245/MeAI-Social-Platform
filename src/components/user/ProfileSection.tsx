@@ -126,7 +126,7 @@ export const ProfileInfoCard = React.memo(
               variant={isFollowing ? 'outline' : 'default'}
               onClick={onToggleFollow}
               disabled={isFollowPending}
-              className='w-full sm:w-auto'
+              className='w-full'
             >
               {isFollowing ? 'Followed' : 'Follow'}
             </Button>
