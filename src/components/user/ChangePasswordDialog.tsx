@@ -38,7 +38,11 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
 
   const changePasswordMutation = useMutation({
     mutationFn: profileApi.changePassword,
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (!response.isSuccess) {
+        toast.error(response?.error.description || 'Could not update password')
+        return
+      }
       toast.success('Password updated')
       reset()
       onOpenChange(false)

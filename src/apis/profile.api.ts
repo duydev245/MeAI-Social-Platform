@@ -41,7 +41,7 @@ export const profileApi = {
 
   async changePassword(data: TChangePasswordPayload): Promise<TChangePasswordResponse> {
     try {
-      const res = await fetcher.put('/api/User/auth/change-password', data);
+      const res = await fetcher.post('/api/User/auth/change-password', data);
       return res.data;
     } catch (error) {
       console.error("Error changing password:", error);

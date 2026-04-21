@@ -1,10 +1,8 @@
-import { ArrowLeft, PencilLine } from 'lucide-react'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { useQuery } from '@tanstack/react-query'
 import type { RootState, AppDispatch } from '@/redux/store'
 import type { TPostResponse, TPublicProfileResponse } from '@/models/feed.model'
 import { feedApi } from '@/apis/feed.api'
@@ -15,17 +13,13 @@ import { handleAuthSuccess } from '@/modules/auth/helpers/auth.helpers'
 import CreatePostDialog from '@/components/post/CreatePostDialog'
 import DeletePostDialog from '@/components/post/DeletePostDialog'
 import EditPostDialog from '@/components/post/EditPostDialog'
-import PostCard from '@/components/post/PostCard'
-import PostFeedSkeleton from '@/components/post/PostFeedSkeleton'
 import PostMediaViewerDialog from '@/components/post/PostMediaViewerDialog'
 import ReportPostDialog from '@/components/post/ReportPostDialog'
 import SignInRequiredDialog from '@/components/user/SignInRequiredDialog'
 import EditProfileDialog from '@/components/user/EditProfileDialog'
 import ChangePasswordDialog from '@/components/user/ChangePasswordDialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { ProfileErrorCard, ProfileHeader, ProfileInfoCard, ProfileSkeleton } from '@/components/user/ProfileSection'
+import { ProfileComposerCard, ProfilePostsSection } from '@/components/user/ProfilePostsSection'
 import type { PostMediaItem } from '@/components/post/PostMediaScroller'
 
 const PROFILE_POST_LIMIT = 10
@@ -36,24 +30,6 @@ type MediaViewerState = {
   index: number
   fallbackType: string | null
 }
-
-const ProfileSkeleton = React.memo(() => (
-  <Card className='border-neutral-200 bg-white'>
-    <CardContent className='flex flex-col items-center gap-4'>
-      <Skeleton className='h-20 w-20 rounded-full' />
-      <div className='grid w-full max-w-sm grid-cols-3 gap-6'>
-        {Array.from({ length: 3 }).map((_, index) => (
-          <div key={`stat-${index}`} className='space-y-2 text-center'>
-            <Skeleton className='mx-auto h-4 w-10' />
-            <Skeleton className='mx-auto h-3 w-12' />
-          </div>
-        ))}
-      </div>
-      <Skeleton className='h-4 w-32' />
-      <Skeleton className='h-9 w-40' />
-    </CardContent>
-  </Card>
-))
 
 function UserProfile() {
   const navigate = useNavigate()
@@ -133,8 +109,11 @@ function UserProfile() {
     }
   })
 
-  const displayName = profile?.fullName ?? 'Unnamed'
-  const avatarFallback = profile?.username ? profile.username.slice(0, 2).toUpperCase() : 'ME'
+  const displayName = useMemo(() => profile?.fullName ?? 'Unnamed', [profile?.fullName])
+  const avatarFallback = useMemo(
+    () => (profile?.username ? profile.username.slice(0, 2).toUpperCase() : 'ME'),
+    [profile?.username]
+  )
   const isFollowing = Boolean(profile?.isFollowedByCurrentUser)
 
   const followMutation = useMutation({
@@ -288,166 +267,68 @@ function UserProfile() {
     return () => observer.disconnect()
   }, [profilePostsQuery.fetchNextPage, profilePostsQuery.hasNextPage, profilePostsQuery.isFetchingNextPage])
 
-  const ProfileError = useCallback(
-    () => (
-      <Card className='border-neutral-200 bg-white'>
-        <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
-          <div>We could not load this profile.</div>
-          <div className='flex gap-2'>
-            <Button variant='outline' size='sm' onClick={() => profileQuery.refetch()}>
-              Try again
-            </Button>
-            <Button variant='outline' size='sm' onClick={() => navigate(PATH.HOME)}>
-              Back to home
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    ),
-    [navigate, profileQuery]
-  )
+  const handleBackHome = useCallback(() => navigate(PATH.HOME), [navigate])
+  const handleRetryProfile = useCallback(() => profileQuery.refetch(), [profileQuery])
+  const handleRetryPosts = useCallback(() => profilePostsQuery.refetch(), [profilePostsQuery])
+  const handleOpenFollowers = useCallback(() => {
+    if (isOwner) navigate(PATH.USER_FOLLOWERS)
+  }, [isOwner, navigate])
+  const handleOpenFollowing = useCallback(() => {
+    if (isOwner) navigate(PATH.USER_FOLLOWERS)
+  }, [isOwner, navigate])
 
   return (
     <>
       <div className='flex flex-col gap-4 px-4 py-6 md:px-6'>
-        <div className='flex items-center gap-2'>
-          <Button
-            variant='outline'
-            size='icon-lg'
-            className='rounded-full'
-            aria-label='Go back'
-            onClick={() => navigate(PATH.HOME)}
-          >
-            <ArrowLeft className='h-4 w-4' />
-          </Button>
-        </div>
+        <ProfileHeader onBack={handleBackHome} />
 
         {profileQuery.isLoading ? (
           <ProfileSkeleton />
         ) : profileQuery.isError || !profile ? (
-          <ProfileError />
+          <ProfileErrorCard onRetry={handleRetryProfile} onBack={handleBackHome} />
         ) : (
-          <Card className='border-neutral-200 bg-white'>
-            <CardContent className='grid grid-cols-1 md:grid-cols-3 '>
-              <Avatar className='col-span-1 h-40 w-40 mx-auto'>
-                {profile.avatarUrl ? <AvatarImage src={profile.avatarUrl} alt={profile.username} /> : null}
-                <AvatarFallback>{avatarFallback}</AvatarFallback>
-              </Avatar>
-              <div className='col-span-2 space-y-4'>
-                <div className='grid w-full grid-cols-3 gap-6 text-center'>
-                  <div className='space-y-1 cursor-default'>
-                    <div className='text-md text-neutral-500'>Posts</div>
-                    <div className='text-base font-semibold text-neutral-900'>{profile.postCount}</div>
-                  </div>
-                  <div
-                    className='space-y-1 cursor-default'
-                    onClick={() => {
-                      if (isOwner) navigate(PATH.USER_FOLLOWERS)
-                      return
-                    }}
-                  >
-                    <div className='text-md text-neutral-500'>Followers</div>
-                    <div className='text-base font-semibold text-neutral-900'>{profile.followersCount}</div>
-                  </div>
-                  <div
-                    className='space-y-1 cursor-default'
-                    onClick={() => {
-                      if (isOwner) navigate(PATH.USER_FOLLOWERS)
-                      return
-                    }}
-                  >
-                    <div className='text-md text-neutral-500'>Following</div>
-                    <div className='text-base font-semibold text-neutral-900'>{profile.followingCount}</div>
-                  </div>
-                </div>
-                <div className='flex flex-col'>
-                  <div className='text-4xl font-semibold text-neutral-900'>{displayName}</div>
-                  <div className='text-base font-light italic text-neutral-900'>@{username}</div>
-                </div>
-                {isOwner ? (
-                  <div className='flex items-center justify-between gap-4'>
-                    <Button variant='outline' className='flex-1' onClick={() => setIsEditProfileOpen(true)}>
-                      Edit profile
-                    </Button>
-                    <Button className='flex-1' onClick={() => setIsChangePasswordOpen(true)}>
-                      Change password
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    variant={isFollowing ? 'outline' : 'default'}
-                    onClick={handleToggleFollow}
-                    disabled={followMutation.isPending}
-                    className='w-full'
-                  >
-                    {isFollowing ? 'Followed' : 'Follow'}
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          <ProfileInfoCard
+            profile={profile}
+            username={username}
+            displayName={displayName}
+            avatarFallback={avatarFallback}
+            isOwner={isOwner}
+            isFollowing={isFollowing}
+            isFollowPending={followMutation.isPending}
+            onEditProfile={() => setIsEditProfileOpen(true)}
+            onChangePassword={() => setIsChangePasswordOpen(true)}
+            onToggleFollow={handleToggleFollow}
+            onOpenFollowers={handleOpenFollowers}
+            onOpenFollowing={handleOpenFollowing}
+          />
         )}
 
         <div className='flex flex-col gap-4'>
           {isOwner ? (
-            <Card className='border-neutral-200 bg-white'>
-              <CardContent className='flex flex-col gap-3'>
-                <div className='flex flex-wrap items-center gap-4'>
-                  <div className='flex-1 flex items-center gap-3'>
-                    <Avatar className='cursor-pointer'>
-                      {currentUser?.avatarPresignedUrl ? (
-                        <AvatarImage src={currentUser.avatarPresignedUrl} alt={currentUser.username} />
-                      ) : null}
-                      <AvatarFallback>{currentUser?.username?.slice(0, 2).toUpperCase() ?? 'ME'}</AvatarFallback>
-                    </Avatar>
-                    <div className='flex-1 text-sm text-neutral-500 cursor-text' onClick={handleCompose}>
-                      Hello {currentUser?.username ?? 'meai-user'}, any thoughts today?
-                    </div>
-                  </div>
-                  <Button variant='outline' size='lg' className='gap-2 w-full sm:w-auto' onClick={handleCompose}>
-                    <PencilLine className='h-4 w-4' />
-                    Write something
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <ProfileComposerCard
+              displayName={currentUser?.username ?? 'meai-user'}
+              avatarUrl={currentUser?.avatarPresignedUrl}
+              avatarFallback={currentUser?.username?.slice(0, 2).toUpperCase() ?? 'ME'}
+              onCompose={handleCompose}
+            />
           ) : null}
 
-          {profilePostsQuery.isLoading ? (
-            <PostFeedSkeleton />
-          ) : profilePostsQuery.isError ? (
-            <Card className='border-neutral-200 bg-white'>
-              <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
-                <div>Something went wrong while loading posts.</div>
-                <Button variant='outline' size='sm' onClick={() => profilePostsQuery.refetch()}>
-                  Try again
-                </Button>
-              </CardContent>
-            </Card>
-          ) : posts.length === 0 ? (
-            <Card className='border-neutral-200 bg-white'>
-              <CardContent className='text-sm text-neutral-600'>No posts yet.</CardContent>
-            </Card>
-          ) : (
-            <div className='flex flex-col gap-4'>
-              {posts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  isAuthed={isAuthed}
-                  onOpenDetail={handleOpenDetail}
-                  onToggleLike={handleToggleLike}
-                  onOpenMedia={handleOpenMedia}
-                  onEditPost={handleEditPost}
-                  onReportPost={handleReportPost}
-                  onDeletePost={handleDeletePost}
-                  onUserClick={handleUserClick}
-                />
-              ))}
-            </div>
-          )}
-
-          {profilePostsQuery.hasNextPage ? <div ref={loadMoreRef} className='h-1 w-full' /> : null}
+          <ProfilePostsSection
+            isLoading={profilePostsQuery.isLoading}
+            isError={profilePostsQuery.isError}
+            posts={posts}
+            isAuthed={isAuthed}
+            onRetry={handleRetryPosts}
+            onOpenDetail={handleOpenDetail}
+            onToggleLike={handleToggleLike}
+            onOpenMedia={handleOpenMedia}
+            onEditPost={handleEditPost}
+            onReportPost={handleReportPost}
+            onDeletePost={handleDeletePost}
+            onUserClick={handleUserClick}
+            loadMoreRef={loadMoreRef}
+            hasNextPage={profilePostsQuery.hasNextPage}
+          />
         </div>
       </div>
 
