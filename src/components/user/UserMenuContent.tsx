@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
@@ -17,6 +18,7 @@ import { authApi } from '@/apis/auth.api'
 import type { AppDispatch } from '@/redux/store'
 import { removeCurrentUser } from '@/redux/slices/current-user.slice'
 import { removeLocalStorage } from '@/utils'
+import { useCallback } from 'react'
 
 type UserMenuContentProps = {
   side: 'right' | 'bottom'
@@ -39,6 +41,7 @@ function UserMenuContent({
   const dispatch = useDispatch<AppDispatch>()
   const { theme, setTheme } = useTheme()
 
+  const isBottom = side === 'bottom'
   const handleProfileClick = () => {
     navigate(profilePath)
   }
@@ -52,6 +55,26 @@ function UserMenuContent({
       window.location.reload()
     }
   }
+
+  const menuChooseAppearance = useCallback(
+    () => (
+      <DropdownMenuRadioGroup value={theme ?? 'system'} onValueChange={setTheme}>
+        <DropdownMenuRadioItem value='light' className='gap-2 cursor-pointer'>
+          <Sun className='h-4 w-4' />
+          Light
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value='dark' className='gap-2 cursor-pointer'>
+          <Moon className='h-4 w-4' />
+          Dark
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value='system' className='gap-2 cursor-pointer'>
+          <Monitor className='h-4 w-4' />
+          System
+        </DropdownMenuRadioItem>
+      </DropdownMenuRadioGroup>
+    ),
+    [theme, setTheme]
+  )
 
   return (
     <DropdownMenuContent side={side} align='end' className='w-64 p-2'>
@@ -71,28 +94,22 @@ function UserMenuContent({
       </button>
       <DropdownMenuSeparator className='my-2' />
 
-      <DropdownMenuSub>
-        <DropdownMenuSubTrigger className='gap-2 p-2 cursor-pointer'>
-          <Sun className='h-4 w-4' />
-          Appearance
-        </DropdownMenuSubTrigger>
-        <DropdownMenuSubContent sideOffset={10} alignOffset={-12} className='w-36'>
-          <DropdownMenuRadioGroup value={theme ?? 'system'} onValueChange={setTheme}>
-            <DropdownMenuRadioItem value='light' className='gap-2 cursor-pointer'>
-              <Sun className='h-4 w-4' />
-              Light
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value='dark' className='gap-2 cursor-pointer'>
-              <Moon className='h-4 w-4' />
-              Dark
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value='system' className='gap-2 cursor-pointer'>
-              <Monitor className='h-4 w-4' />
-              System
-            </DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
-        </DropdownMenuSubContent>
-      </DropdownMenuSub>
+      {isBottom ? (
+        <>
+          <DropdownMenuLabel className='px-2'>Appearance</DropdownMenuLabel>
+          {menuChooseAppearance()}
+        </>
+      ) : (
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className='gap-2 p-2 cursor-pointer'>
+            <Sun className='h-4 w-4' />
+            Appearance
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent sideOffset={10} alignOffset={-12} className='w-36'>
+            {menuChooseAppearance()}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      )}
 
       <DropdownMenuItem variant='destructive' className='gap-2 p-2 cursor-pointer' onClick={handleLogout}>
         <LogOut className='h-4 w-4' />
