@@ -36,7 +36,7 @@ const CommentContent = memo(({ content, maxLines = 4 }: CommentContentProps) => 
     <div className='space-y-2'>
       <div
         ref={contentRef}
-        className='w-full max-w-full whitespace-pre-wrap wrap-break-word text-sm text-neutral-800'
+        className='w-full max-w-full whitespace-pre-wrap wrap-break-word text-sm text-foreground'
         style={clampStyle}
       >
         {content}
@@ -44,7 +44,7 @@ const CommentContent = memo(({ content, maxLines = 4 }: CommentContentProps) => 
       {canExpand ? (
         <button
           type='button'
-          className='text-xs font-semibold text-neutral-900 hover:underline'
+          className='text-xs font-semibold text-foreground hover:underline'
           onClick={() => setIsExpanded((current) => !current)}
         >
           {isExpanded ? 'Show less' : 'Show more'}

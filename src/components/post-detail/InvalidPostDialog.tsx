@@ -25,7 +25,7 @@ function InvalidPostDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogMedia>
-            <ArrowLeft className='h-5 w-5 text-neutral-700' />
+            <ArrowLeft className='h-5 w-5 text-foreground' />
           </AlertDialogMedia>
           <AlertDialogTitle>Invalid page</AlertDialogTitle>
           <AlertDialogDescription>

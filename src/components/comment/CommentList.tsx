@@ -84,8 +84,8 @@ function CommentList({
 
   if (commentsQuery.isError) {
     return (
-      <Card className='border-neutral-200 bg-white'>
-        <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
+      <Card className='border-border bg-card'>
+        <CardContent className='flex flex-col gap-3 text-sm text-muted-foreground'>
           <div>Something went wrong while loading comments.</div>
           <Button variant='outline' size='sm' onClick={() => commentsQuery.refetch()}>
             Try again
@@ -98,8 +98,8 @@ function CommentList({
   return (
     <div className='flex flex-col gap-4'>
       {comments.length === 0 ? (
-        <Card className='border-neutral-200 bg-white'>
-          <CardContent className='text-sm text-neutral-500'>No comments yet.</CardContent>
+        <Card className='border-border bg-card'>
+          <CardContent className='text-sm text-muted-foreground'>No comments yet.</CardContent>
         </Card>
       ) : (
         <div className='flex flex-col gap-4'>
@@ -120,7 +120,7 @@ function CommentList({
 
       {commentsQuery.hasNextPage ? <div ref={loadMoreRef} className='h-1 w-full' /> : null}
       {commentsQuery.isFetchingNextPage ? (
-        <div className='text-xs text-center text-neutral-500'>Loading more comments...</div>
+        <div className='text-xs text-center text-muted-foreground'>Loading more comments...</div>
       ) : null}
     </div>
   )

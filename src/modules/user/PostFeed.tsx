@@ -170,7 +170,7 @@ function PostFeed() {
     <>
       <div className='flex flex-col gap-4 px-4 py-6 md:px-6'>
         {isAuthed ? (
-          <Card className='border-neutral-200 bg-white'>
+          <Card className='border-border bg-card'>
             <CardContent className='flex flex-col gap-3'>
               <div className='flex flex-wrap items-center gap-4'>
                 <div className='flex-1 flex items-center gap-3'>
@@ -178,7 +178,7 @@ function PostFeed() {
                     {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
                     <AvatarFallback>{avatarFallback}</AvatarFallback>
                   </Avatar>
-                  <div className='flex-1 text-sm text-neutral-500 cursor-text' onClick={handleCompose}>
+                  <div className='flex-1 text-sm text-muted-foreground cursor-text' onClick={handleCompose}>
                     Hello {displayName}, any thoughts today?
                   </div>
                 </div>
@@ -194,8 +194,8 @@ function PostFeed() {
         {feedQuery.isLoading ? (
           <PostFeedSkeleton />
         ) : feedQuery.isError ? (
-          <Card className='border-neutral-200 bg-white'>
-            <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
+          <Card className='border-border bg-card'>
+            <CardContent className='flex flex-col gap-3 text-sm text-muted-foreground'>
               <div>Something went wrong while loading your feed.</div>
               <Button variant='outline' size='sm' onClick={() => feedQuery.refetch()}>
                 Try again

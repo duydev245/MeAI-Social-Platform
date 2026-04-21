@@ -9,6 +9,7 @@ import { Toaster } from '@/components/ui/sonner.tsx'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import envConfig from '@/config.ts'
 import { BrowserRouter } from 'react-router'
+import { ThemeProvider } from 'next-themes'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,14 +27,16 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId={envConfig.GOOGLE_CLIENT_ID} locale='en'>
     <Provider store={store}>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <Toaster richColors theme='system' position='top-right' duration={3000} />
-          <TooltipProvider>
-            <App />
-          </TooltipProvider>
-        </QueryClientProvider>
-      </BrowserRouter>
+      <ThemeProvider attribute='class' defaultTheme='light' enableSystem disableTransitionOnChange>
+        <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <Toaster richColors position='top-right' duration={3000} />
+            <TooltipProvider>
+              <App />
+            </TooltipProvider>
+          </QueryClientProvider>
+        </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   </GoogleOAuthProvider>
 )

@@ -39,7 +39,7 @@ export const ProfileHeader = React.memo(({ onBack }: ProfileHeaderProps) => (
 ))
 
 export const ProfileSkeleton = React.memo(() => (
-  <Card className='border-neutral-200 bg-white'>
+  <Card className='border-border bg-card'>
     <CardContent className='flex flex-col items-center gap-4'>
       <Skeleton className='h-16 w-16 rounded-full md:h-20 md:w-20' />
       <div className='grid w-full max-w-sm grid-cols-3 gap-4 md:gap-6'>
@@ -57,8 +57,8 @@ export const ProfileSkeleton = React.memo(() => (
 ))
 
 export const ProfileErrorCard = React.memo(({ onRetry, onBack }: ProfileErrorCardProps) => (
-  <Card className='border-neutral-200 bg-white'>
-    <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
+  <Card className='border-border bg-card'>
+    <CardContent className='flex flex-col gap-3 text-sm text-muted-foreground'>
       <div>We could not load this profile.</div>
       <div className='flex gap-2'>
         <Button variant='outline' size='sm' onClick={onRetry}>
@@ -87,30 +87,30 @@ export const ProfileInfoCard = React.memo(
     onOpenFollowers,
     onOpenFollowing
   }: ProfileInfoCardProps) => (
-    <Card className='border-neutral-200 bg-white'>
+    <Card className='border-border bg-card'>
       <CardContent className='grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8'>
-        <Avatar className='col-span-1 h-28 w-28 mx-auto md:h-40 md:w-40 md:mx-0'>
+        <Avatar className='h-28 w-28 justify-self-center md:col-span-1 md:h-40 md:w-40'>
           {profile.avatarUrl ? <AvatarImage src={profile.avatarUrl} alt={profile.username} /> : null}
           <AvatarFallback>{avatarFallback}</AvatarFallback>
         </Avatar>
-        <div className='col-span-2 space-y-4 text-center md:text-left'>
+        <div className='space-y-4 text-center md:col-span-2 md:text-left'>
           <div className='grid w-full grid-cols-3 gap-4 text-center md:gap-6'>
             <div className='space-y-1 cursor-default'>
-              <div className='text-xs text-neutral-500 md:text-md'>Posts</div>
-              <div className='text-base font-semibold text-neutral-900'>{profile.postCount}</div>
+              <div className='text-xs text-muted-foreground md:text-md'>Posts</div>
+              <div className='text-base font-semibold text-foreground'>{profile.postCount}</div>
             </div>
             <button type='button' className='space-y-1 cursor-default' onClick={onOpenFollowers}>
-              <div className='text-xs text-neutral-500 md:text-md'>Followers</div>
-              <div className='text-base font-semibold text-neutral-900'>{profile.followersCount}</div>
+              <div className='text-xs text-muted-foreground md:text-md'>Followers</div>
+              <div className='text-base font-semibold text-foreground'>{profile.followersCount}</div>
             </button>
             <button type='button' className='space-y-1 cursor-default' onClick={onOpenFollowing}>
-              <div className='text-xs text-neutral-500 md:text-md'>Following</div>
-              <div className='text-base font-semibold text-neutral-900'>{profile.followingCount}</div>
+              <div className='text-xs text-muted-foreground md:text-md'>Following</div>
+              <div className='text-base font-semibold text-foreground'>{profile.followingCount}</div>
             </button>
           </div>
           <div className='flex flex-col'>
-            <div className='text-2xl font-semibold text-start text-neutral-900 md:text-4xl'>{displayName}</div>
-            <div className='text-sm font-light italic text-start text-neutral-900 md:text-base'>@{username}</div>
+            <div className='text-2xl font-semibold text-start text-foreground md:text-4xl'>{displayName}</div>
+            <div className='text-sm font-light italic text-start text-muted-foreground md:text-base'>@{username}</div>
           </div>
           {isOwner ? (
             <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>

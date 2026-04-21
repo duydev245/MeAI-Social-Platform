@@ -287,7 +287,7 @@ function EditProfileDialog({
             </div>
           </div>
         ) : isProfileError || !profile ? (
-          <div className='space-y-4 text-sm text-neutral-600'>
+          <div className='space-y-4 text-sm text-muted-foreground'>
             <div>Unable to load profile details.</div>
             {onRetry ? (
               <Button variant='outline' size='sm' onClick={onRetry}>
@@ -319,7 +319,7 @@ function EditProfileDialog({
 
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='flex flex-col gap-2'>
-                <label className='text-sm font-medium text-neutral-700' htmlFor='fullName'>
+                <label className='text-sm font-medium text-foreground' htmlFor='fullName'>
                   Full name
                 </label>
                 <Input
@@ -334,11 +334,11 @@ function EditProfileDialog({
               </div>
 
               <div className='flex flex-col gap-2'>
-                <label className='text-sm font-medium text-neutral-700' htmlFor='phoneNumber'>
+                <label className='text-sm font-medium text-foreground' htmlFor='phoneNumber'>
                   Phone number
                 </label>
                 <div className='relative'>
-                  <span className='absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500'>
+                  <span className='absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground'>
                     {PHONE_PREFIX}
                   </span>
                   <Input
@@ -358,7 +358,7 @@ function EditProfileDialog({
               </div>
 
               <div className='flex flex-col gap-2 md:col-span-2'>
-                <label className='text-sm font-medium text-neutral-700' htmlFor='address'>
+                <label className='text-sm font-medium text-foreground' htmlFor='address'>
                   Address
                 </label>
                 <Input
@@ -374,7 +374,7 @@ function EditProfileDialog({
               </div>
 
               <div className='flex flex-col gap-2'>
-                <label className='text-sm font-medium text-neutral-700' htmlFor='birthday'>
+                <label className='text-sm font-medium text-foreground' htmlFor='birthday'>
                   Birthday
                 </label>
                 <Input

@@ -26,15 +26,15 @@ function UserActivity() {
         <Card
           key={item.userNotificationId || index}
           onClick={() => markAsRead(item.userNotificationId)}
-          className={cn('cursor-pointer transition-colors', item.isRead ? 'bg-white' : 'bg-neutral-100')}
+          className={cn('cursor-pointer transition-colors', item.isRead ? 'bg-card' : 'bg-muted')}
         >
           <CardContent className='flex items-start gap-3'>
             <div className='flex-1 flex items-center gap-3'>
               <Icon className='h-8 w-8' />
               <div className='flex-1 space-y-1'>
-                <CardTitle className='text-sm font-semibold text-neutral-900'>{item.title || 'Notification'}</CardTitle>
-                <p className='text-sm text-neutral-900'>{item.message}</p>
-                <p className='text-xs text-neutral-400'>{formatRelativeTime(item.createdAt)}</p>
+                <CardTitle className='text-sm font-semibold text-foreground'>{item.title || 'Notification'}</CardTitle>
+                <p className='text-sm text-foreground'>{item.message}</p>
+                <p className='text-xs text-muted-foreground'>{formatRelativeTime(item.createdAt)}</p>
               </div>
             </div>
             {!item.isRead && <span className='mt-1 h-2 w-2 rounded-full bg-red-500' />}
@@ -49,7 +49,7 @@ function UserActivity() {
     return (
       <div className='flex flex-col gap-3'>
         {Array.from({ length: 3 }).map((_, index) => (
-          <Card key={`skeleton-${index}`} className='bg-white'>
+          <Card key={`skeleton-${index}`} className='bg-card'>
             <CardHeader className='flex flex-row items-start justify-between gap-3'>
               <div className='space-y-2'>
                 <Skeleton className='h-4 w-40' />
@@ -71,7 +71,7 @@ function UserActivity() {
     <div className='flex flex-col gap-4 px-4 py-6 md:px-6'>
       <div className='flex items-center justify-between md:p-4'>
         <div className='flex items-start gap-1'>
-          <h1 className='text-2xl font-semibold text-neutral-900'>Activity</h1>
+          <h1 className='text-2xl font-semibold text-foreground'>Activity</h1>
           <div aria-hidden='true' className={`h-2 w-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
         </div>
         <Button variant='outline' size='sm' onClick={markAllAsRead} disabled={unreadCount === 0}>
@@ -82,8 +82,8 @@ function UserActivity() {
       {isLoading ? (
         _renderSkeleton()
       ) : items.length === 0 ? (
-        <Card className='border-dashed border-neutral-200 bg-white'>
-          <CardContent className='py-8 text-center text-sm text-neutral-500'>No activities yet.</CardContent>
+        <Card className='border-dashed border-border bg-card'>
+          <CardContent className='py-8 text-center text-sm text-muted-foreground'>No activities yet.</CardContent>
         </Card>
       ) : (
         <div className='flex flex-col gap-3'>{items.map((item, index) => _renderItem(item, index))}</div>

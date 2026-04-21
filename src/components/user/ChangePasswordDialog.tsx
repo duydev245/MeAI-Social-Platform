@@ -84,7 +84,7 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
 
         <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium text-neutral-700' htmlFor='oldPassword'>
+            <label className='text-sm font-medium text-foreground' htmlFor='oldPassword'>
               Current password
             </label>
             <div className='relative'>
@@ -100,7 +100,7 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
                 type='button'
                 variant='link'
                 size='icon-lg'
-                className='absolute inset-y-0 right-3 top-0 h-11 text-neutral-500 hover:text-neutral-800'
+                className='absolute inset-y-0 right-3 top-0 h-11 text-muted-foreground hover:text-foreground'
                 onClick={() => setShowOldPassword((prev) => !prev)}
                 aria-label={showOldPassword ? 'Hide password' : 'Show password'}
               >
@@ -111,7 +111,7 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
           </div>
 
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium text-neutral-700' htmlFor='newPassword'>
+            <label className='text-sm font-medium text-foreground' htmlFor='newPassword'>
               New password
             </label>
             <div className='relative'>
@@ -127,7 +127,7 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
                 type='button'
                 variant='link'
                 size='icon-lg'
-                className='absolute inset-y-0 right-3 top-0 h-11 text-neutral-500 hover:text-neutral-800'
+                className='absolute inset-y-0 right-3 top-0 h-11 text-muted-foreground hover:text-foreground'
                 onClick={() => setShowNewPassword((prev) => !prev)}
                 aria-label={showNewPassword ? 'Hide password' : 'Show password'}
               >
@@ -138,7 +138,7 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
           </div>
 
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium text-neutral-700' htmlFor='confirmNewPassword'>
+            <label className='text-sm font-medium text-foreground' htmlFor='confirmNewPassword'>
               Confirm new password
             </label>
             <div className='relative'>
@@ -154,7 +154,7 @@ function ChangePasswordDialog({ open, onOpenChange }: ChangePasswordDialogProps)
                 type='button'
                 variant='link'
                 size='icon-lg'
-                className='absolute inset-y-0 right-3 top-0 h-11 text-neutral-500 hover:text-neutral-800'
+                className='absolute inset-y-0 right-3 top-0 h-11 text-muted-foreground hover:text-foreground'
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
                 aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
               >

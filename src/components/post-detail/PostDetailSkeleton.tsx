@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 function PostDetailSkeleton() {
   return (
-    <Card className='border-neutral-200 bg-white'>
+    <Card className='border-border bg-card'>
       <CardContent className='flex flex-col gap-3 sm:gap-4'>
         <div className='flex items-start justify-between gap-3'>
           <div className='flex items-center gap-2'>

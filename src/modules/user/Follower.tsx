@@ -35,7 +35,7 @@ function UserCard({ user, onClick }: UserCardProps) {
   const avatarFallback = user.username.slice(0, 2).toUpperCase()
 
   return (
-    <Card className='border-neutral-200 bg-white transition hover:border-neutral-300 hover:shadow-sm'>
+    <Card className='border-border bg-card transition hover:border-border hover:shadow-sm'>
       <CardContent>
         <button
           type='button'
@@ -47,8 +47,8 @@ function UserCard({ user, onClick }: UserCardProps) {
             <AvatarFallback>{avatarFallback}</AvatarFallback>
           </Avatar>
           <div className='flex flex-1 flex-col gap-1'>
-            <div className='text-sm font-semibold text-neutral-900'>@{user.username}</div>
-            <div className='text-xs text-neutral-500'>
+            <div className='text-sm font-semibold text-foreground'>@{user.username}</div>
+            <div className='text-xs text-muted-foreground'>
               {displayName} · {formatPostCount(user.postCount)}
             </div>
           </div>
@@ -62,7 +62,7 @@ function UserListSkeleton({ count = 4 }: { count?: number }) {
   return (
     <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
       {Array.from({ length: count }).map((_, index) => (
-        <Card key={`skeleton-${index}`} className='border-neutral-200 bg-white'>
+        <Card key={`skeleton-${index}`} className='border-border bg-card'>
           <CardContent>
             <div className='flex items-center gap-3'>
               <Skeleton className='h-10 w-10 rounded-full' />
@@ -101,16 +101,16 @@ function Follower() {
 
   const renderEmptyState = useCallback((message: string) => {
     return (
-      <Card className='border-dashed border-neutral-200 bg-white'>
-        <CardContent className='py-8 text-center text-sm text-neutral-500'>{message}</CardContent>
+      <Card className='border-dashed border-border bg-card'>
+        <CardContent className='py-8 text-center text-sm text-muted-foreground'>{message}</CardContent>
       </Card>
     )
   }, [])
 
   const renderErrorState = useCallback((message: string, onRetry: () => void) => {
     return (
-      <Card className='border-neutral-200 bg-white'>
-        <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
+      <Card className='border-border bg-card'>
+        <CardContent className='flex flex-col gap-3 text-sm text-muted-foreground'>
           <div>{message}</div>
           <Button variant='outline' size='sm' onClick={onRetry}>
             Try again
@@ -164,8 +164,8 @@ function Follower() {
   return (
     <div className='flex flex-col gap-6 px-4 py-6 md:px-6'>
       <div className='space-y-1'>
-        <h1 className='text-2xl font-semibold text-neutral-900'>Grow your network</h1>
-        <p className='text-sm text-neutral-600'>Discover new people and manage your followers.</p>
+        <h1 className='text-2xl font-semibold text-foreground'>Grow your network</h1>
+        <p className='text-sm text-muted-foreground'>Discover new people and manage your followers.</p>
       </div>
 
       <section className='space-y-3'>

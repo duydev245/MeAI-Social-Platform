@@ -63,7 +63,7 @@ function UserLayoutContent({
 
   return (
     <>
-      <div className='relative min-h-screen bg-[#f8fafc] text-neutral-900'>
+      <div className='relative min-h-screen bg-background text-foreground'>
         <UserMobileHeader
           displayName={displayName}
           displayEmail={displayEmail}

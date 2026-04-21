@@ -83,7 +83,7 @@ const PostDetailCard = React.memo(
     }, [post.id, post.username])
 
     return (
-      <Card className='border-neutral-200 bg-white'>
+      <Card className='border-border bg-card'>
         <CardContent className='flex flex-col gap-3 sm:gap-4'>
           <div className='flex items-start justify-between gap-3'>
             <div className='flex items-center justify-start gap-2 cursor-pointer' onClick={handleUserClick}>
@@ -91,9 +91,9 @@ const PostDetailCard = React.memo(
                 {post.avatarUrl ? <AvatarImage src={post.avatarUrl} alt={post.username} /> : null}
                 <AvatarFallback>{post.username.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <div className='flex flex-col items-start text-xs sm:text-sm font-semibold text-neutral-900'>
+              <div className='flex flex-col items-start text-xs sm:text-sm font-semibold text-foreground'>
                 <span className='break-all'>{post.username}</span>
-                {timeLabel ? <span className='text-xs font-normal text-neutral-500'>{timeLabel}</span> : null}
+                {timeLabel ? <span className='text-xs font-normal text-muted-foreground'>{timeLabel}</span> : null}
               </div>
             </div>
             <DropdownMenu>
@@ -135,10 +135,10 @@ const PostDetailCard = React.memo(
             <PostMediaScroller items={mediaItems} fallbackType={post.mediaType} onOpenMedia={onOpenMedia} />
           ) : null}
 
-          <div className='flex items-center gap-4 sm:gap-6 text-xs sm:text-sm text-neutral-600'>
+          <div className='flex items-center gap-4 sm:gap-6 text-xs sm:text-sm text-muted-foreground'>
             <button
               type='button'
-              className='flex items-center gap-2 transition hover:text-neutral-900 cursor-pointer'
+              className='flex items-center gap-2 transition hover:text-foreground cursor-pointer'
               onClick={handleLike}
             >
               <Heart className={heartClass} />
@@ -146,7 +146,7 @@ const PostDetailCard = React.memo(
             </button>
             <button
               type='button'
-              className='flex items-center gap-2 text-neutral-500 hover:text-neutral-900'
+              className='flex items-center gap-2 text-muted-foreground hover:text-foreground'
               onClick={handleCommentClick}
             >
               <MessageCircle className='h-4 w-4' />

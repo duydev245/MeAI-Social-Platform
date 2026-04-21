@@ -79,11 +79,11 @@ const CommentReplyItem = memo(
         </Avatar>
         <div className='flex-1 space-y-1'>
           <div className='flex items-start justify-between gap-2'>
-            <div className='flex flex-col text-xs text-neutral-900'>
+            <div className='flex flex-col text-xs text-foreground'>
               <span className='font-semibold break-all cursor-pointer' onClick={handleUserClick}>
                 {displayName}
               </span>
-              {timeLabel ? <span className='text-[11px] font-normal text-neutral-500'>{timeLabel}</span> : null}
+              {timeLabel ? <span className='text-[11px] font-normal text-muted-foreground'>{timeLabel}</span> : null}
             </div>
             {isAuthed ? (
               <div className='flex items-center gap-1'>
@@ -112,10 +112,10 @@ const CommentReplyItem = memo(
             ) : null}
           </div>
           <CommentContent content={reply.content} />
-          <div className='flex items-center gap-3 text-xs text-neutral-600'>
+          <div className='flex items-center gap-3 text-xs text-muted-foreground'>
             <button
               type='button'
-              className='flex items-center gap-1 hover:text-neutral-900'
+              className='flex items-center gap-1 hover:text-foreground'
               onClick={handleLike}
               disabled={isLikeBusy}
             >
@@ -123,7 +123,7 @@ const CommentReplyItem = memo(
               {reply.likesCount}
             </button>
             {canReply ? (
-              <button type='button' className='flex items-center gap-1 hover:text-neutral-900' onClick={handleReply}>
+              <button type='button' className='flex items-center gap-1 hover:text-foreground' onClick={handleReply}>
                 <MessageCircle className='h-3 w-3' />
                 Reply
               </button>

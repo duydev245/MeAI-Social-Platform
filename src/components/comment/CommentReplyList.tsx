@@ -62,7 +62,7 @@ const CommentReplyList = memo(
               isDeleteBusy={isDeleteBusy}
             />
             {children.length ? (
-              <div className='space-y-3 border-l border-neutral-200 pl-4'>
+              <div className='space-y-3 border-l border-border pl-4'>
                 {children.map((child) => {
                   const childOwner = isSameUsername(child.username, currentUsername)
                   const childCanDelete = childOwner || isPostOwner

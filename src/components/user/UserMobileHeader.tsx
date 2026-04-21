@@ -24,8 +24,8 @@ function UserMobileHeader({
   onLogoClick
 }: UserMobileHeaderProps) {
   return (
-    <header className='sticky top-0 z-30 flex items-center justify-between border-b border-neutral-200/60 bg-white/95 px-4 py-3 backdrop-blur md:hidden'>
-      <span className='text-2xl font-heading text-black' onClick={onLogoClick}>
+    <header className='sticky top-0 z-30 flex items-center justify-between border-b border-border/60 bg-background/95 px-4 py-3 backdrop-blur md:hidden'>
+      <span className='text-2xl font-heading text-foreground' onClick={onLogoClick}>
         @MeAI
       </span>
       {isAuthed ? (
@@ -33,7 +33,7 @@ function UserMobileHeader({
           <DropdownMenuTrigger asChild>
             <button
               type='button'
-              className='flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 text-neutral-700 transition hover:bg-neutral-100'
+              className='flex h-9 w-9 items-center justify-center rounded-xl border border-border text-foreground transition hover:bg-muted'
               aria-label='Open menu'
             >
               <Menu className='h-4 w-4' />
@@ -51,7 +51,7 @@ function UserMobileHeader({
       ) : (
         <button
           type='button'
-          className='flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 text-neutral-700 transition hover:bg-neutral-100'
+          className='flex h-9 w-9 items-center justify-center rounded-xl border border-border text-foreground transition hover:bg-muted'
           aria-label='Open menu'
           onClick={onRequireAuth}
         >

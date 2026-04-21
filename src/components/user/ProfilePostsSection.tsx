@@ -34,7 +34,7 @@ type ProfilePostsSectionProps = {
 
 export const ProfileComposerCard = React.memo(
   ({ displayName, avatarUrl, avatarFallback, onCompose }: ProfileComposerCardProps) => (
-    <Card className='border-neutral-200 bg-white'>
+    <Card className='border-border bg-card'>
       <CardContent className='flex flex-col gap-3'>
         <div className='flex flex-wrap items-center gap-4'>
           <div className='flex-1 flex items-center gap-3'>
@@ -42,7 +42,7 @@ export const ProfileComposerCard = React.memo(
               {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
               <AvatarFallback>{avatarFallback}</AvatarFallback>
             </Avatar>
-            <div className='flex-1 text-sm text-neutral-500 cursor-text' onClick={onCompose}>
+            <div className='flex-1 text-sm text-muted-foreground cursor-text' onClick={onCompose}>
               Hello {displayName}, any thoughts today?
             </div>
           </div>
@@ -76,8 +76,8 @@ export const ProfilePostsSection = React.memo(
     if (isLoading) return <PostFeedSkeleton />
     if (isError) {
       return (
-        <Card className='border-neutral-200 bg-white'>
-          <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
+        <Card className='border-border bg-card'>
+          <CardContent className='flex flex-col gap-3 text-sm text-muted-foreground'>
             <div>Something went wrong while loading posts.</div>
             <Button variant='outline' size='sm' onClick={onRetry}>
               Try again
@@ -89,8 +89,8 @@ export const ProfilePostsSection = React.memo(
 
     if (posts.length === 0) {
       return (
-        <Card className='border-neutral-200 bg-white'>
-          <CardContent className='text-sm text-neutral-600'>No posts yet.</CardContent>
+        <Card className='border-border bg-card'>
+          <CardContent className='text-sm text-muted-foreground'>No posts yet.</CardContent>
         </Card>
       )
     }

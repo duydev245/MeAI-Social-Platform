@@ -40,7 +40,7 @@ const PostMediaViewerDialog = React.memo(
           <DialogHeader className='items-center px-3 sm:px-4 pt-4 pb-2'>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
-          <div className='flex flex-1 items-center justify-between w-full bg-white px-3 sm:px-4 pb-4 pt-2 overflow-hidden'>
+          <div className='flex flex-1 items-center justify-between w-full bg-background px-3 sm:px-4 pb-4 pt-2 overflow-hidden'>
             <Button
               variant='outline'
               size='icon'

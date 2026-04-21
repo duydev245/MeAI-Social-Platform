@@ -260,11 +260,11 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
       >
         <div className='relative'>
           {isBusy ? (
-            <div className='absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm'>
-              <div className='w-[min(90%,20rem)] space-y-3 rounded-xl border bg-white p-4 shadow-sm'>
-                <div className='text-sm font-semibold text-neutral-900'>{progressLabel ?? 'Processing...'}</div>
-                <div className='h-2 w-full overflow-hidden rounded-full bg-neutral-200'>
-                  <div className='h-full bg-neutral-900 transition-[width]' style={{ width: `${progressPercent}%` }} />
+            <div className='absolute inset-0 z-10 flex items-center justify-center bg-background/80 backdrop-blur-sm'>
+              <div className='w-[min(90%,20rem)] space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm'>
+                <div className='text-sm font-semibold text-foreground'>{progressLabel ?? 'Processing...'}</div>
+                <div className='h-2 w-full overflow-hidden rounded-full bg-muted'>
+                  <div className='h-full bg-primary transition-[width]' style={{ width: `${progressPercent}%` }} />
                 </div>
               </div>
             </div>
@@ -280,11 +280,11 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
                 ) : null}
                 <AvatarFallback>{avatarFallback}</AvatarFallback>
               </Avatar>
-              <div className='mt-3 flex-1 w-px bg-neutral-200' />
+              <div className='mt-3 flex-1 w-px bg-border' />
             </div>
 
             <div className='flex-1 min-w-0 space-y-3'>
-              <div className='text-sm font-semibold text-neutral-900'>{displayName}</div>
+              <div className='text-sm font-semibold text-foreground'>{displayName}</div>
               <Textarea
                 placeholder='Update your post'
                 className='w-full max-w-full resize-none whitespace-pre-wrap wrap-break-word'
@@ -315,7 +315,7 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
                       )}
                       <button
                         type='button'
-                        className='absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white cursor-pointer'
+                        className='absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-foreground/70 text-background cursor-pointer'
                         onClick={() => handleRemoveExisting(item.resourceId)}
                         onPointerDown={(event) => event.stopPropagation()}
                         aria-label='Remove media'
@@ -345,7 +345,7 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
                       )}
                       <button
                         type='button'
-                        className='absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white cursor-pointer'
+                        className='absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-foreground/70 text-background cursor-pointer'
                         onClick={() => handleRemoveNew(index)}
                         onPointerDown={(event) => event.stopPropagation()}
                         aria-label='Remove media'
@@ -371,7 +371,7 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
                   type='button'
                   variant='outline'
                   size='icon-lg'
-                  className='text-neutral-600'
+                  className='text-muted-foreground'
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isBusy}
                 >

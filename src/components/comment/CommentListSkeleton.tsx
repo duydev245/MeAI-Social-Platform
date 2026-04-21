@@ -10,7 +10,7 @@ function CommentListSkeleton({ items = DEFAULT_ITEMS }: CommentListSkeletonProps
   return (
     <div className='flex flex-col gap-4'>
       {Array.from({ length: items }).map((_, index) => (
-        <div key={index} className='rounded-xl border border-neutral-200 bg-white p-4'>
+        <div key={index} className='rounded-xl border border-border bg-card p-4'>
           <div className='flex gap-3'>
             <Skeleton className='h-8 w-8 rounded-full' />
             <div className='flex-1 space-y-2'>

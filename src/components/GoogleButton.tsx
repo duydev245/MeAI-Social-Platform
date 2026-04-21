@@ -40,8 +40,8 @@ function GoogleButton({ onCredential, onError, onStart, isLoading = false, class
   return (
     <div className={cn('relative w-full', className)}>
       <div className='relative h-11 w-full'>
-        <div className='pointer-events-none absolute inset-0 flex items-center justify-center gap-3 rounded-xl border border-neutral-200 bg-white text-sm font-medium text-neutral-800 shadow-[0_10px_30px_rgba(15,23,42,0.08)]'>
-          <span className='flex h-7 w-7 items-center justify-center bg-white'>
+        <div className='pointer-events-none absolute inset-0 flex items-center justify-center gap-3 rounded-xl border border-border bg-card text-sm font-medium text-foreground shadow-[0_10px_30px_rgba(15,23,42,0.08)]'>
+          <span className='flex h-7 w-7 items-center justify-center bg-card'>
             <GoogleIcon />
           </span>
           <span>Continue with Google</span>
@@ -70,7 +70,7 @@ function GoogleButton({ onCredential, onError, onStart, isLoading = false, class
         </div>
       </div>
       {isLoading && (
-        <div className='pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-white/70 text-neutral-700'>
+        <div className='pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-card/70 text-muted-foreground'>
           <Loader2 className='h-4 w-4 animate-spin' />
         </div>
       )}

@@ -277,8 +277,8 @@ function PostDetail() {
             <CommentListSkeleton />
           </div>
         ) : postQuery.isError || !post ? (
-          <Card className='border-neutral-200 bg-white'>
-            <CardContent className='flex flex-col gap-3 text-sm text-neutral-600'>
+          <Card className='border-border bg-card'>
+            <CardContent className='flex flex-col gap-3 text-sm text-muted-foreground'>
               <div>We could not load this post.</div>
               <div className='flex gap-2'>
                 <Button variant='outline' size='sm' onClick={() => postQuery.refetch()}>
@@ -306,7 +306,7 @@ function PostDetail() {
 
             <div className='flex flex-col gap-4'>
               {isAuthed ? (
-                <Card className='border-neutral-200 bg-white'>
+                <Card className='border-border bg-card'>
                   <CardContent className='flex gap-3'>
                     <Avatar className='h-9 w-9'>
                       {currentUser?.avatarPresignedUrl ? (
@@ -332,8 +332,8 @@ function PostDetail() {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className='border-neutral-200 bg-white'>
-                  <CardContent className='flex items-center justify-between gap-4 text-sm text-neutral-600'>
+                <Card className='border-border bg-card'>
+                  <CardContent className='flex items-center justify-between gap-4 text-sm text-muted-foreground'>
                     <span>Sign in to join the conversation.</span>
                     <Button variant='outline' size='sm' onClick={() => navigate(PATH.LOGIN)}>
                       Sign in

@@ -52,7 +52,7 @@ const PostContent = React.memo(({ content, maxLines = 4 }: PostContentProps) => 
       }
 
       output.push(
-        <strong key={`tag-${index}`} className='font-semibold text-neutral-900'>
+        <strong key={`tag-${index}`} className='font-semibold text-foreground'>
           {part.value}
         </strong>
       )
@@ -98,7 +98,7 @@ const PostContent = React.memo(({ content, maxLines = 4 }: PostContentProps) => 
     <div className='space-y-2'>
       <div
         ref={contentRef}
-        className='w-full max-w-full whitespace-pre-wrap wrap-break-word text-sm text-neutral-800'
+        className='w-full max-w-full whitespace-pre-wrap wrap-break-word text-sm text-foreground'
         style={clampStyle}
       >
         {nodes}
@@ -106,7 +106,7 @@ const PostContent = React.memo(({ content, maxLines = 4 }: PostContentProps) => 
       {canExpand ? (
         <button
           type='button'
-          className='text-xs font-semibold text-neutral-900 hover:underline'
+          className='text-xs font-semibold text-foreground hover:underline'
           onClick={() => setIsExpanded((current) => !current)}
         >
           {isExpanded ? 'Show less' : 'Show more'}

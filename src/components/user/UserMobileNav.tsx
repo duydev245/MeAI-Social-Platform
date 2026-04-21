@@ -36,7 +36,7 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
         <button
           key={item.label}
           type='button'
-          className='flex flex-col items-center gap-1 px-2 text-neutral-500'
+          className='flex flex-col items-center gap-1 px-2 text-muted-foreground'
           onClick={onRequireAuth}
           aria-disabled='true'
         >
@@ -52,7 +52,7 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
         to={item.to}
         end={item.end}
         className={({ isActive }) =>
-          `flex flex-col items-center gap-1 px-2 ${isActive ? 'text-neutral-900' : 'text-neutral-500'}`
+          `flex flex-col items-center gap-1 px-2 ${isActive ? 'text-foreground' : 'text-muted-foreground'}`
         }
       >
         {iconNode}
@@ -62,15 +62,15 @@ function UserMobileNav({ navItems, isAuthed, onCompose, onRequireAuth }: UserMob
   }
 
   return (
-    <nav className='fixed bottom-4 left-1/2 z-40 flex w-[min(100%-2rem,28rem)] -translate-x-1/2 items-center justify-between rounded-2xl border border-neutral-200 bg-white/95 px-4 py-2 text-[11px] font-medium text-neutral-500 shadow-[0_18px_40px_rgba(15,23,42,0.14)] backdrop-blur md:hidden'>
+    <nav className='fixed bottom-4 left-1/2 z-40 flex w-[min(100%-2rem,28rem)] -translate-x-1/2 items-center justify-between rounded-2xl border border-border bg-background/95 px-4 py-2 text-[11px] font-medium text-muted-foreground shadow-[0_18px_40px_rgba(15,23,42,0.14)] backdrop-blur md:hidden'>
       {primaryItems.map(renderItem)}
       <button
         type='button'
-        className='flex h-12 w-12 items-center justify-center rounded-md bg-neutral-100 text-white'
+        className='flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground'
         aria-label='Create new post'
         onClick={onCompose}
       >
-        <Plus className='h-5 w-5 text-neutral-500' />
+        <Plus className='h-5 w-5 text-primary-foreground' />
       </button>
       {secondaryItems.map(renderItem)}
     </nav>

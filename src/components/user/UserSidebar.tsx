@@ -26,7 +26,7 @@ type UserSidebarProps = {
 }
 
 const itemClass =
-  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition text-muted-foreground hover:bg-muted hover:text-foreground'
 
 const renderIcon = (Icon: LucideIcon, hasIndicator?: boolean) => (
   <span className='relative'>
@@ -53,9 +53,9 @@ function UserSidebar({
   const secondaryItems = navItems.slice(1)
 
   return (
-    <aside className='hidden md:sticky md:top-0 md:flex md:h-screen md:w-64 md:flex-col md:gap-6 md:self-start md:bg-white md:p-4'>
+    <aside className='hidden md:sticky md:top-0 md:flex md:h-screen md:w-64 md:flex-col md:gap-6 md:self-start md:bg-card md:p-4'>
       <div className='flex items-center justify-between px-4 mb-3 cursor-pointer'>
-        <span className='text-3xl font-heading text-black' onClick={onLogoClick}>
+        <span className='text-3xl font-heading text-foreground' onClick={onLogoClick}>
           @MeAI
         </span>
       </div>
@@ -71,8 +71,8 @@ function UserSidebar({
                     className={({ isActive }) =>
                       `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
                         isActive
-                          ? 'bg-neutral-200 text-neutral-900'
-                          : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                          ? 'bg-accent text-accent-foreground'
+                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                       }`
                     }
                   >
@@ -84,7 +84,7 @@ function UserSidebar({
             : null}
           <button
             type='button'
-            className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100'
+            className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted'
             onClick={isAuthed ? onCompose : onRequireAuth}
           >
             <Plus className='h-4 w-4' />
@@ -115,8 +115,8 @@ function UserSidebar({
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
                     isActive
-                      ? 'bg-neutral-200 text-neutral-900'
-                      : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   }`
                 }
               >
@@ -131,7 +131,7 @@ function UserSidebar({
             <DropdownMenuTrigger asChild>
               <button
                 type='button'
-                className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100 data-[state=open]:bg-neutral-200'
+                className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted data-[state=open]:bg-accent'
               >
                 <Menu className='h-4 w-4' />
                 More
@@ -149,7 +149,7 @@ function UserSidebar({
         ) : (
           <button
             type='button'
-            className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-neutral-900 transition hover:bg-neutral-100'
+            className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted'
             onClick={onRequireAuth}
           >
             <Menu className='h-4 w-4' />

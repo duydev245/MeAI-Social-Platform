@@ -361,7 +361,7 @@ const CommentItem = memo(function CommentItem({
 
   return (
     <>
-      <div className='rounded-xl border border-neutral-200 bg-white p-4'>
+      <div className='rounded-xl border border-border bg-card p-4'>
         <div className='flex gap-3'>
           <Avatar className='h-8 w-8 cursor-pointer' onClick={handleUserClick}>
             {comment.avatarUrl ? <AvatarImage src={comment.avatarUrl} alt={displayName} /> : null}
@@ -369,11 +369,11 @@ const CommentItem = memo(function CommentItem({
           </Avatar>
           <div className='flex-1 space-y-2'>
             <div className='flex items-start justify-between gap-2'>
-              <div className='flex flex-col text-xs text-neutral-900'>
+              <div className='flex flex-col text-xs text-foreground'>
                 <span className='font-semibold break-all cursor-pointer' onClick={handleUserClick}>
                   {displayName}
                 </span>
-                {timeLabel ? <span className='text-[11px] font-normal text-neutral-500'>{timeLabel}</span> : null}
+                {timeLabel ? <span className='text-[11px] font-normal text-muted-foreground'>{timeLabel}</span> : null}
               </div>
               {isAuthed ? (
                 <div className='flex items-center gap-1'>
@@ -402,10 +402,10 @@ const CommentItem = memo(function CommentItem({
               ) : null}
             </div>
             <CommentContent content={comment.content} />
-            <div className='flex items-center gap-4 text-xs text-neutral-600'>
+            <div className='flex items-center gap-4 text-xs text-muted-foreground'>
               <button
                 type='button'
-                className='flex items-center gap-1 hover:text-neutral-900'
+                className='flex items-center gap-1 hover:text-foreground'
                 onClick={handleLikeComment}
                 disabled={isCommentLikeBusy}
               >
@@ -414,7 +414,7 @@ const CommentItem = memo(function CommentItem({
               </button>
               <button
                 type='button'
-                className='flex items-center gap-1 hover:text-neutral-900'
+                className='flex items-center gap-1 hover:text-foreground'
                 onClick={() => handleReplyTo(comment)}
               >
                 <MessageCircle className='h-4 w-4' />
@@ -425,7 +425,7 @@ const CommentItem = memo(function CommentItem({
             {hasReplies ? (
               <button
                 type='button'
-                className='text-xs font-semibold text-neutral-700 hover:text-neutral-900'
+                className='text-xs font-semibold text-muted-foreground hover:text-foreground'
                 onClick={() => setIsExpanded((current) => !current)}
               >
                 {isExpanded ? 'Hide replies' : `View replies (${comment.repliesCount})`}
@@ -433,18 +433,18 @@ const CommentItem = memo(function CommentItem({
             ) : null}
 
             {isExpanded ? (
-              <div className='space-y-3 border-l border-neutral-200 pl-4'>
+              <div className='space-y-3 border-l border-border pl-4'>
                 {repliesQuery.isLoading ? (
-                  <div className='text-xs text-neutral-500'>Loading replies...</div>
+                  <div className='text-xs text-muted-foreground'>Loading replies...</div>
                 ) : repliesQuery.isError ? (
-                  <div className='flex items-center gap-2 text-xs text-neutral-500'>
+                  <div className='flex items-center gap-2 text-xs text-muted-foreground'>
                     <span>Failed to load replies.</span>
                     <Button variant='outline' size='xs' onClick={() => repliesQuery.refetch()}>
                       Retry
                     </Button>
                   </div>
                 ) : rootReplies.length === 0 ? (
-                  <div className='text-xs text-neutral-500'>No replies yet.</div>
+                  <div className='text-xs text-muted-foreground'>No replies yet.</div>
                 ) : (
                   <CommentReplyList
                     rootReplies={rootReplies}
@@ -466,13 +466,13 @@ const CommentItem = memo(function CommentItem({
 
                 {repliesQuery.hasNextPage ? <div ref={loadMoreRef} className='h-1 w-full' /> : null}
                 {repliesQuery.isFetchingNextPage ? (
-                  <div className='text-xs text-neutral-500'>Loading more replies...</div>
+                  <div className='text-xs text-muted-foreground'>Loading more replies...</div>
                 ) : null}
               </div>
             ) : null}
 
             <div className='space-y-2'>
-              <div className='flex items-center justify-between text-xs text-neutral-500'>
+              <div className='flex items-center justify-between text-xs text-muted-foreground'>
                 <span>Replying to {replyTargetName}</span>
               </div>
               <Textarea

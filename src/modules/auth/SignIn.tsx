@@ -69,17 +69,17 @@ function SignIn() {
   }
 
   return (
-    <Card className='h-full w-full self-stretch gap-0 border border-neutral-200/80 bg-white/90 shadow-[0_24px_60px_rgba(15,23,42,0.16)] backdrop-blur md:h-auto md:max-w-115 md:self-auto'>
+    <Card className='h-full w-full self-stretch gap-0 border border-border/80 bg-card/90 shadow-[0_24px_60px_rgba(15,23,42,0.16)] backdrop-blur md:h-auto md:max-w-115 md:self-auto'>
       <CardHeader className='relative items-center gap-2 pt-6 pb-2 text-center'>
         <Link
           to={PATH.HOME}
-          className='absolute left-4 top-6 inline-flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200 text-neutral-600 transition hover:border-neutral-300 hover:text-neutral-900'
+          className='absolute left-4 top-6 inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-border hover:text-foreground'
           aria-label='Back to home'
         >
           <ArrowLeft className='h-4 w-4' />
         </Link>
-        <CardTitle className='text-2xl font-semibold text-neutral-900'>Welcome back!</CardTitle>
-        <CardDescription className='text-sm text-neutral-500'>
+        <CardTitle className='text-2xl font-semibold text-foreground'>Welcome back!</CardTitle>
+        <CardDescription className='text-sm text-muted-foreground'>
           Sign in to access your personalized feed and updates.
         </CardDescription>
       </CardHeader>
@@ -87,7 +87,7 @@ function SignIn() {
       <CardContent className='flex flex-1 flex-col gap-4 pt-6'>
         <form className='flex flex-col gap-4' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium text-neutral-700' htmlFor='emailOrUsername'>
+            <label className='text-sm font-medium text-foreground' htmlFor='emailOrUsername'>
               Email or username
             </label>
             <Input
@@ -105,7 +105,7 @@ function SignIn() {
           </div>
 
           <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium text-neutral-700' htmlFor='password'>
+            <label className='text-sm font-medium text-foreground' htmlFor='password'>
               Password
             </label>
             <div className='relative'>
@@ -122,7 +122,7 @@ function SignIn() {
                 type='button'
                 variant='link'
                 size='icon-lg'
-                className='absolute inset-y-0 right-3 top-0 h-11 text-neutral-500 hover:text-neutral-800'
+                className='absolute inset-y-0 right-3 top-0 h-11 text-muted-foreground hover:text-foreground'
                 onClick={() => setShowPassword((prev) => !prev)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
@@ -135,7 +135,7 @@ function SignIn() {
           <div className='flex items-center justify-end mr-5'>
             <button
               type='button'
-              className='text-xs font-medium text-neutral-600 transition hover:text-neutral-900'
+              className='text-xs font-medium text-muted-foreground transition hover:text-foreground'
               onClick={() => navigate(PATH.FORGOT_PASSWORD)}
             >
               Forgot password?
@@ -148,17 +148,17 @@ function SignIn() {
           </Button>
         </form>
 
-        <div className='w-full text-center text-xs text-neutral-500'>
+        <div className='w-full text-center text-xs text-muted-foreground'>
           <span>Do not have an account? </span>
-          <Link to={PATH.SIGN_UP} className='font-medium text-neutral-600 transition hover:text-neutral-900'>
+          <Link to={PATH.SIGN_UP} className='font-medium text-muted-foreground transition hover:text-foreground'>
             Create one
           </Link>
         </div>
 
-        <div className='flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-400'>
-          <span className='h-px flex-1 bg-neutral-200' />
+        <div className='flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-muted-foreground'>
+          <span className='h-px flex-1 bg-border' />
           or
-          <span className='h-px flex-1 bg-neutral-200' />
+          <span className='h-px flex-1 bg-border' />
         </div>
 
         <GoogleButton
