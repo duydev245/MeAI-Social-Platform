@@ -16,7 +16,7 @@ import PostMediaViewerDialog from '@/components/post/PostMediaViewerDialog'
 import ReportPostDialog from '@/components/post/ReportPostDialog'
 import type { PostMediaItem } from '@/components/post/PostMediaScroller'
 import SignInRequiredDialog from '@/components/user/SignInRequiredDialog'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -37,6 +37,7 @@ function PostFeed() {
     () => PATH.USER_PROFILE.replace(':username', `@${currentUser?.username ?? 'me'}`),
     [currentUser?.username]
   )
+  const avatarUrl = currentUser?.avatarPresignedUrl ?? null
   const displayName = currentUser?.username ?? 'meai-user'
   const avatarFallback = useMemo(() => displayName.slice(0, 2).toUpperCase(), [displayName])
   const [isComposerOpen, setIsComposerOpen] = useState(false)
@@ -174,6 +175,7 @@ function PostFeed() {
               <div className='flex flex-wrap items-center gap-4'>
                 <div className='flex-1 flex items-center gap-3'>
                   <Avatar className='cursor-pointer' onClick={() => navigate(profilePath)}>
+                    {avatarUrl ? <AvatarImage src={avatarUrl} alt={displayName} /> : null}
                     <AvatarFallback>{avatarFallback}</AvatarFallback>
                   </Avatar>
                   <div className='flex-1 text-sm text-neutral-500 cursor-text' onClick={handleCompose}>

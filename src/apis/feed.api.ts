@@ -12,6 +12,7 @@ import type {
   TFeedCursor,
   TPostLikeResponse,
   TPostResponse,
+  TPublicProfileResponse,
   TFollowSuggestionResponse,
   TFollowUserResponse,
   TReportPayload,
@@ -32,10 +33,23 @@ type TCreateReplyEnvelope = TCreateReplyResponse
 type TCommentLikeEnvelope = TResult<TCommentLikeResponse>
 type TFollowSuggestionEnvelope = TResult<TFollowSuggestionResponse[]>
 type TFollowListEnvelope = TResult<TFollowUserResponse[]>
+type TProfileEnvelope = TResult<TPublicProfileResponse>
+type TFollowEnvelope = TResult<TFollowUserResponse>
+type TUnfollowEnvelope = TResult<null>
 
 export const feedApi = {
   async getFeed(params: TFeedCursor) {
     const response = await fetcher.get<TFeedListResponse>('/api/Feed/posts/feed', { params })
+    return response.data.value ?? []
+  },
+
+  async getProfile(username: string) {
+    const response = await fetcher.get<TProfileEnvelope>(`/api/Feed/profiles/${username}`)
+    return response.data.value
+  },
+
+  async getProfilePosts(username: string, params: TFeedCursor) {
+    const response = await fetcher.get<TFeedListResponse>(`/api/Feed/profiles/${username}/posts`, { params })
     return response.data.value ?? []
   },
 
@@ -124,5 +138,15 @@ export const feedApi = {
   async getFollowing(userId: string, params: TFeedCursor) {
     const response = await fetcher.get<TFollowListEnvelope>(`/api/Feed/following/${userId}`, { params })
     return response.data.value ?? []
+  },
+
+  async followUser(userId: string) {
+    const response = await fetcher.post<TFollowEnvelope>(`/api/Feed/follow/${userId}`)
+    return response.data.value
+  },
+
+  async unfollowUser(userId: string) {
+    const response = await fetcher.delete<TUnfollowEnvelope>(`/api/Feed/follow/${userId}`)
+    return response.data.value
   }
 }

@@ -52,9 +52,9 @@ export type UpdateProfileData = z.infer<typeof UpdateProfileFormSchema>;
 
 export type TUpdateProfilePayload = {
   fullName?: string;
-  phoneNumber?: string;
-  address?: string;
-  birthday?: string;
+  phoneNumber?: string | null;
+  address?: string | null;
+  birthday?: string | null;
 }
 
 // Upload avatar response

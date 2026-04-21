@@ -195,8 +195,8 @@ function Follower() {
 
       <Tabs defaultValue='followers' className='w-full space-y-2'>
         <TabsList variant='line' className='w-full justify-start gap-2'>
-          <TabsTrigger value='followers'>Followers</TabsTrigger>
-          <TabsTrigger value='following'>Following</TabsTrigger>
+          <TabsTrigger value='followers'>Followers ({followers.length})</TabsTrigger>
+          <TabsTrigger value='following'>Following ({following.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value='followers' className='space-y-3'>

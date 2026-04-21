@@ -14,6 +14,17 @@ export type TFeedCursor = {
   limit?: number
 }
 
+export type TPublicProfileResponse = {
+  userId: string
+  username: string
+  fullName: string | null
+  avatarUrl: string | null
+  postCount: number
+  followersCount: number
+  followingCount: number
+  isFollowedByCurrentUser: boolean | null
+}
+
 export type TPostMediaResponse = {
   resourceId: string
   presignedUrl: string
