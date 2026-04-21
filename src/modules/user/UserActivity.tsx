@@ -2,48 +2,42 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useNotifications } from '@/hooks/use-notifications'
-import { parseNotificationPayload, type NotificationDeliveryModel } from '@/models/notification.model'
-import { formatDate } from '@/utils'
-import { useCallback } from 'react'
+import { cn } from '@/lib/utils'
+import { type NotificationDeliveryModel } from '@/models/notification.model'
+import { formatRelativeTime } from '@/utils'
+import { BellIcon, HeartIcon, MessageCircleIcon, PenLineIcon, UserPlus2Icon } from 'lucide-react'
+import { type ElementType, useCallback } from 'react'
+
+const IconMapping: Record<string, ElementType> = {
+  'Feed.Followed': UserPlus2Icon,
+  'Feed.Commented': MessageCircleIcon,
+  'Feed.NewPost': PenLineIcon,
+  'Feed.PostLiked': HeartIcon,
+  'Feed.CommentLiked': HeartIcon
+}
 
 function UserActivity() {
   const { items, isLoading, isConnected, unreadCount, markAsRead, markAllAsRead } = useNotifications()
 
   const _renderItem = useCallback(
     (item: NotificationDeliveryModel, index: number) => {
-      const payload = parseNotificationPayload(item.payloadJson)
-      const hasPayload = payload && typeof payload === 'object'
-
+      const Icon = IconMapping[item.type] ?? BellIcon
       return (
-        <Card key={item.userNotificationId || index} className={item.isRead ? 'bg-white' : 'bg-neutral-50'}>
-          <CardHeader className='flex flex-row items-start justify-between gap-3'>
-            <div className='space-y-1'>
-              <CardTitle className='text-sm text-neutral-900'>{item.title || 'Notification'}</CardTitle>
-              <p className='text-xs text-neutral-500'>
-                {formatDate(item.createdAt)} · {item.source}
-              </p>
+        <Card
+          key={item.userNotificationId || index}
+          onClick={() => markAsRead(item.userNotificationId)}
+          className={cn('cursor-pointer transition-colors', item.isRead ? 'bg-white' : 'bg-neutral-100')}
+        >
+          <CardContent className='flex items-start gap-3'>
+            <div className='flex-1 flex items-center gap-3'>
+              <Icon className='h-8 w-8' />
+              <div className='flex-1 space-y-1'>
+                <CardTitle className='text-sm font-semibold text-neutral-900'>{item.title || 'Notification'}</CardTitle>
+                <p className='text-sm text-neutral-900'>{item.message}</p>
+                <p className='text-xs text-neutral-400'>{formatRelativeTime(item.createdAt)}</p>
+              </div>
             </div>
-            <div className='flex items-center gap-2'>
-              {!item.isRead ? <span className='h-2 w-2 rounded-full bg-red-500' aria-hidden='true' /> : null}
-              {!item.isRead ? (
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  className='text-neutral-600 hover:text-neutral-900'
-                  onClick={() => markAsRead(item.userNotificationId)}
-                >
-                  Mark as read
-                </Button>
-              ) : null}
-            </div>
-          </CardHeader>
-          <CardContent className='space-y-2 text-sm text-neutral-700'>
-            <p>{item.message}</p>
-            {hasPayload ? (
-              <pre className='overflow-x-auto rounded-lg bg-neutral-100 p-3 text-xs text-neutral-700'>
-                {JSON.stringify(payload, null, 2)}
-              </pre>
-            ) : null}
+            {!item.isRead && <span className='mt-1 h-2 w-2 rounded-full bg-red-500' />}
           </CardContent>
         </Card>
       )
@@ -89,7 +83,7 @@ function UserActivity() {
         _renderSkeleton()
       ) : items.length === 0 ? (
         <Card className='border-dashed border-neutral-200 bg-white'>
-          <CardContent className='py-8 text-center text-sm text-neutral-500'>No notifications yet.</CardContent>
+          <CardContent className='py-8 text-center text-sm text-neutral-500'>No activities yet.</CardContent>
         </Card>
       ) : (
         <div className='flex flex-col gap-3'>{items.map((item, index) => _renderItem(item, index))}</div>
