@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "meai-social-fe",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2025-02-01",
+
+  "vars": {
+    "VITE_API_URL": "https://vkev.me",
+    "VITE_GOOGLE_CLIENT_ID": "303736486592-idatc7bo080fsf3b8tscepm7def8lj2o.apps.googleusercontent.com",
+    "VITE_NODE_ENV": "production"
+  },
+
+  "routes": [
+    {
+      "pattern": "meai-social.vkev.me",
+      "custom_domain": true
+    }
+  ],
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/runtime-config.js"]
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

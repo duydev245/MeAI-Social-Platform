@@ -6,10 +6,12 @@ const configSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']),
 });
 
+const runtimeConfig = window.__MEAI_RUNTIME_CONFIG__ ?? {};
+
 const config = configSchema.safeParse({
-  BASE_URL: import.meta.env.VITE_API_URL,
-  GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-  NODE_ENV: import.meta.env.VITE_NODE_ENV,
+  BASE_URL: runtimeConfig.VITE_API_URL ?? import.meta.env.VITE_API_URL,
+  GOOGLE_CLIENT_ID: runtimeConfig.VITE_GOOGLE_CLIENT_ID ?? import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  NODE_ENV: runtimeConfig.VITE_NODE_ENV ?? import.meta.env.VITE_NODE_ENV,
 });
 
 if (!config.success) {
