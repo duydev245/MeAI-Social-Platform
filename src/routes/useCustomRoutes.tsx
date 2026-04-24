@@ -37,7 +37,9 @@ const ProtectedRoutes = ({ roleAccess, children }: ProtectedRoutesProps) => {
     return <Navigate to={PATH.AUTH} replace />
   }
 
-  if (roleAccess && !storedUser.roles?.includes(roleAccess)) {
+  const userRoles = storedUser.roles.map((role) => role.toUpperCase())
+
+  if (roleAccess && !userRoles.includes(roleAccess.toUpperCase())) {
     return <Navigate to={PATH.HOME} replace />
   }
 
