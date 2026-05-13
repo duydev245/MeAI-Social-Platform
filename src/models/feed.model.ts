@@ -151,3 +151,11 @@ export type TFollowSuggestionResponse = {
   avatarUrl: string | null
   postCount: number
 }
+
+export type TPostCheckSensitiveResponse = {
+  postId: string
+  isSensitive: boolean
+  category: string | null
+  reason: string | null
+  confidenceScore: number
+}

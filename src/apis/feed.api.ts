@@ -18,7 +18,8 @@ import type {
   TReportPayload,
   TReportResponse,
   TUpdatePostPayload,
-  TUpdatePostResponse
+  TUpdatePostResponse,
+  TPostCheckSensitiveResponse
 } from '@/models/feed.model'
 
 type TFeedListResponse = TResult<TPostResponse[]>
@@ -36,6 +37,7 @@ type TFollowListEnvelope = TResult<TFollowUserResponse[]>
 type TProfileEnvelope = TResult<TPublicProfileResponse>
 type TFollowEnvelope = TResult<TFollowUserResponse>
 type TUnfollowEnvelope = TResult<null>
+type TPostCheckSensitive = TResult<TPostCheckSensitiveResponse>
 
 export const feedApi = {
   async getFeed(params: TFeedCursor) {
@@ -148,5 +150,10 @@ export const feedApi = {
   async unfollowUser(userId: string) {
     const response = await fetcher.delete<TUnfollowEnvelope>(`/api/Feed/follow/${userId}`)
     return response.data.value
-  }
+  },
+
+  async checkSensitivePost(postId: string) {
+    const response = await fetcher.post<TPostCheckSensitive>(`/api/Ai/posts/${postId}/check-sensitive`)
+    return response.data.value
+  },
 }

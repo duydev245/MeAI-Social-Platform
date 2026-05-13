@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { RootState } from '@/redux/store'
-import type { TPostMediaType } from '@/models/feed.model'
+import type { TPostCheckSensitiveResponse, TPostMediaType } from '@/models/feed.model'
 import { feedApi } from '@/apis/feed.api'
 import { resourceApi } from '@/apis/resource.api'
 import { feedKeys } from '@/hooks/use-feed'
@@ -22,6 +22,12 @@ type MediaItem = {
   file: File
   previewUrl: string
   kind: 'image' | 'video'
+}
+
+type CreatePostFlowResult = {
+  postId: string
+  outcome: 'clean' | 'sensitive' | 'check-failed'
+  sensitiveResult?: TPostCheckSensitiveResponse
 }
 
 const getMediaType = (items: MediaItem[]): TPostMediaType => {
@@ -101,17 +107,57 @@ function CreatePostDialog({ open, onOpenChange }: CreatePostDialogProps) {
           .filter((value): value is string => Boolean(value))
       }
 
-      setProgressPercent(95)
+      setProgressPercent(88)
       setProgressLabel('Creating post...')
       const response = await feedApi.createPost({
         content: trimmedContent,
         resourceIds,
         mediaType: getMediaType(mediaItems)
       })
-      setProgressPercent(100)
-      return response
+
+      setProgressPercent(94)
+      setProgressLabel('Checking sensitive content...')
+      try {
+        const sensitiveResult = await feedApi.checkSensitivePost(response.id)
+
+        if (sensitiveResult.isSensitive) {
+          setProgressPercent(98)
+          setProgressLabel('Sensitive content detected. Removing post...')
+          await feedApi.deletePost(response.id)
+          return {
+            postId: response.id,
+            outcome: 'sensitive',
+            sensitiveResult
+          } satisfies CreatePostFlowResult
+        }
+
+        setProgressPercent(100)
+        return {
+          postId: response.id,
+          outcome: 'clean',
+          sensitiveResult
+        } satisfies CreatePostFlowResult
+      } catch {
+        setProgressPercent(98)
+        setProgressLabel('Sensitive check failed. Removing post...')
+        await feedApi.deletePost(response.id)
+        return {
+          postId: response.id,
+          outcome: 'check-failed'
+        } satisfies CreatePostFlowResult
+      }
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result.outcome === 'sensitive') {
+        toast.error('Sensitive content detected. The post was removed.')
+        return
+      }
+
+      if (result.outcome === 'check-failed') {
+        toast.error('Could not verify sensitive content. The post was removed.')
+        return
+      }
+
       toast.success('Post created')
       queryClient.invalidateQueries({ queryKey: feedKeys.all })
       queryClient.refetchQueries({ queryKey: feedKeys.all, type: 'active' })
