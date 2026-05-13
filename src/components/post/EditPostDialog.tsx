@@ -1,23 +1,17 @@
-import { ImagePlus, Loader2, Trash2, X } from 'lucide-react'
+import { ImagePlus, Loader2, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import type { TPostCheckSensitiveResponse, TPostMediaType, TPostResponse } from '@/models/feed.model'
+import type {
+  TPostCheckSensitiveResponse,
+  TPostMediaType,
+  TPostResponse,
+  TUpdatePostPayload
+} from '@/models/feed.model'
 import { feedApi } from '@/apis/feed.api'
 import { resourceApi } from '@/apis/resource.api'
 import { feedKeys } from '@/hooks/use-feed'
 import { Button } from '@/components/ui/button'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import type { RootState } from '@/redux/store'
@@ -48,10 +42,16 @@ type UpdatePostFlowResult = {
   sensitiveResult?: TPostCheckSensitiveResponse
 }
 
-type SensitiveLockState = {
-  postId: string
-  sensitiveResult: TPostCheckSensitiveResponse
+const toPostMediaType = (mediaType: string | null): TPostMediaType => {
+  if (mediaType === 'Image' || mediaType === 'Video') return mediaType
+  return null
 }
+
+const buildRollbackPayload = (source: TPostResponse): TUpdatePostPayload => ({
+  content: source.content,
+  resourceIds: (source.media ?? []).map((item) => item.resourceId),
+  mediaType: toPostMediaType(source.mediaType)
+})
 
 const isVideoMedia = (item: { contentType: string | null; resourceType: string | null }) =>
   Boolean(item.contentType?.startsWith('video/') || item.resourceType === 'Video')
@@ -74,14 +74,12 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
   const [newMedia, setNewMedia] = useState<NewMediaItem[]>([])
   const [progressPercent, setProgressPercent] = useState(0)
   const [progressLabel, setProgressLabel] = useState<string | null>(null)
-  const [sensitiveLock, setSensitiveLock] = useState<SensitiveLockState | null>(null)
-  const [isSensitiveConfirmOpen, setIsSensitiveConfirmOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const mediaScrollRef = useRef<HTMLDivElement | null>(null)
   const isDraggingRef = useRef(false)
   const dragStartXRef = useRef(0)
   const scrollLeftRef = useRef(0)
-  const historyGuardRef = useRef(false)
+  const originalPostPayloadRef = useRef<TUpdatePostPayload | null>(null)
 
   const resetState = () => {
     newMedia.forEach((item) => URL.revokeObjectURL(item.previewUrl))
@@ -91,9 +89,7 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
     setContent('')
     setProgressPercent(0)
     setProgressLabel(null)
-    setSensitiveLock(null)
-    setIsSensitiveConfirmOpen(false)
-    historyGuardRef.current = false
+    originalPostPayloadRef.current = null
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -115,9 +111,7 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
       setNewMedia([])
       setProgressPercent(0)
       setProgressLabel(null)
-      setSensitiveLock(null)
-      setIsSensitiveConfirmOpen(false)
-      historyGuardRef.current = false
+      originalPostPayloadRef.current = buildRollbackPayload(post)
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
@@ -139,27 +133,6 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
   const isDirty = useMemo(() => {
     return (post?.content ?? '') !== content || removedResourceIds.length > 0 || newMedia.length > 0
   }, [content, newMedia.length, post?.content, removedResourceIds.length])
-
-  const clearSensitiveLock = () => {
-    setSensitiveLock(null)
-    setIsSensitiveConfirmOpen(false)
-    historyGuardRef.current = false
-  }
-
-  const deleteSensitivePostMutation = useMutation({
-    mutationFn: async (postId: string) => {
-      return feedApi.deletePost(postId)
-    },
-    onSuccess: () => {
-      toast.success('Sensitive post deleted')
-      queryClient.invalidateQueries({ queryKey: feedKeys.all })
-      clearSensitiveLock()
-      onOpenChange(false)
-    },
-    onError: () => {
-      toast.error('Could not delete sensitive post')
-    }
-  })
 
   const updatePostMutation = useMutation({
     mutationFn: async () => {
@@ -219,11 +192,9 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
 
         if (sensitiveResult.isSensitive) {
           setProgressPercent(98)
-          setProgressLabel('Sensitive content detected. Keep editing or delete the post...')
-          return {
-            outcome: 'sensitive',
-            sensitiveResult
-          } satisfies UpdatePostFlowResult
+          setProgressLabel('Sensitive content detected. Restoring previous version...')
+          await feedApi.updatePost(response.id, originalPostPayloadRef.current ?? buildRollbackPayload(post))
+          return { outcome: 'sensitive', sensitiveResult } satisfies UpdatePostFlowResult
         }
 
         setProgressPercent(100)
@@ -233,30 +204,27 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
         } satisfies UpdatePostFlowResult
       } catch {
         setProgressPercent(98)
-        setProgressLabel('Sensitive check failed.')
-        return {
-          outcome: 'check-failed'
-        } satisfies UpdatePostFlowResult
+        setProgressLabel('Sensitive content detected. Restoring previous version...')
+        await feedApi.updatePost(response.id, originalPostPayloadRef.current ?? buildRollbackPayload(post))
+        return { outcome: 'sensitive' } satisfies UpdatePostFlowResult
       }
     },
     onSuccess: (result) => {
       if (result.outcome === 'clean') {
         toast.success('Post updated')
-        clearSensitiveLock()
         queryClient.invalidateQueries({ queryKey: feedKeys.all })
         onOpenChange(false)
         return
       }
 
       if (result.outcome === 'sensitive') {
-        if (post) {
-          setSensitiveLock({ postId: post.id, sensitiveResult: result.sensitiveResult! })
-        }
-        toast.error('Sensitive content detected. Please review before leaving.')
+        toast.error('Sensitive content detected. Changes were reverted.')
+        queryClient.invalidateQueries({ queryKey: feedKeys.all })
         return
       }
 
-      toast.error('Could not verify sensitive content.')
+      toast.error('Could not verify sensitive content. Changes were reverted.')
+      queryClient.invalidateQueries({ queryKey: feedKeys.all })
     },
     onError: () => {
       toast.error('Could not update post')
@@ -267,19 +235,11 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
     }
   })
 
-  const isBusy = updatePostMutation.isPending || deleteSensitivePostMutation.isPending
-  const isSensitiveLocked = Boolean(sensitiveLock)
+  const isBusy = updatePostMutation.isPending
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (isBusy) return
-    if (!nextOpen && isSensitiveLocked) {
-      setIsSensitiveConfirmOpen(true)
-      return
-    }
     onOpenChange(nextOpen)
-    if (!nextOpen) {
-      clearSensitiveLock()
-    }
   }
 
   const handleSubmit = () => {
@@ -342,43 +302,6 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
     if (!isDraggingRef.current) return
     isDraggingRef.current = false
     mediaScrollRef.current?.releasePointerCapture?.(event.pointerId)
-  }
-
-  useEffect(() => {
-    if (!open || !isSensitiveLocked) return
-
-    if (!historyGuardRef.current) {
-      window.history.pushState({ sensitiveEditGuard: true }, '', window.location.href)
-      historyGuardRef.current = true
-    }
-
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault()
-      event.returnValue = ''
-    }
-
-    const handlePopState = () => {
-      setIsSensitiveConfirmOpen(true)
-      window.history.pushState({ sensitiveEditGuard: true }, '', window.location.href)
-    }
-
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    window.addEventListener('popstate', handlePopState)
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-      window.removeEventListener('popstate', handlePopState)
-    }
-  }, [isSensitiveLocked, open])
-
-  const handleSensitiveDeleteConfirm = () => {
-    if (!sensitiveLock || isBusy) return
-    deleteSensitivePostMutation.mutate(sensitiveLock.postId)
-  }
-
-  const handleSensitiveConfirmOpenChange = (nextOpen: boolean) => {
-    if (isBusy) return
-    setIsSensitiveConfirmOpen(nextOpen)
   }
 
   return (
@@ -526,34 +449,6 @@ function EditPostDialog({ open, post, onOpenChange }: EditPostDialogProps) {
           </div>
         </div>
       </DialogContent>
-
-      <AlertDialog open={isSensitiveConfirmOpen} onOpenChange={handleSensitiveConfirmOpenChange}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <Trash2 className='h-5 w-5 text-amber-600' />
-            </AlertDialogMedia>
-            <AlertDialogTitle>Content is sensitive</AlertDialogTitle>
-            <AlertDialogDescription>
-              {sensitiveLock?.sensitiveResult.category ? (
-                <span>
-                  This post was flagged as {sensitiveLock.sensitiveResult.category}. If you leave, the post will be
-                  deleted.
-                </span>
-              ) : (
-                <span>This post was flagged as sensitive. If you leave, the post will be deleted.</span>
-              )}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isBusy}>Keep editing</AlertDialogCancel>
-            <AlertDialogAction variant='destructive' onClick={handleSensitiveDeleteConfirm} disabled={isBusy}>
-              {deleteSensitivePostMutation.isPending ? <Loader2 className='h-4 w-4 animate-spin' /> : null}
-              Delete and leave
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </Dialog>
   )
 }
